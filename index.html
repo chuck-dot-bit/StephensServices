@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fractional Sales Operations | Stephen Samchuck</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #FAF7F2;
+    --warm-white: #FFFFFF;
+    --ink: #1A1A2E;
+    --ink-light: #3D3D5C;
+    --sage: #4A7C6F;
+    --sage-light: #E8F0EE;
+    --gold: #C8973A;
+    --gold-light: #FDF3E3;
+    --border: #E2DDD6;
+    --shadow: rgba(26,26,46,0.08);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--ink);
+    line-height: 1.6;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    background: var(--warm-white);
+    border-bottom: 1px solid var(--border);
+    padding: 18px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .header-name {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.15rem;
+    color: var(--ink);
+    letter-spacing: 0.01em;
+  }
+  .header-tag {
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: var(--sage);
+    background: var(--sage-light);
+    padding: 4px 12px;
+    border-radius: 20px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 72px 40px 48px;
+    text-align: center;
+  }
+  .eyebrow {
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+  }
+  .eyebrow::before, .eyebrow::after {
+    content: '';
+    display: block;
+    width: 32px;
+    height: 1px;
+    background: var(--gold);
+    opacity: 0.5;
+  }
+  .hero h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(2.2rem, 5vw, 3.4rem);
+    line-height: 1.18;
+    color: var(--ink);
+    margin-bottom: 24px;
+    letter-spacing: -0.01em;
+  }
+  .hero h1 em {
+    font-style: italic;
+    color: var(--sage);
+  }
+  .hero-sub {
+    font-size: 1.1rem;
+    font-weight: 300;
+    color: var(--ink-light);
+    max-width: 580px;
+    margin: 0 auto 36px;
+    line-height: 1.7;
+  }
+
+  /* ── PRICE CARD ── */
+  .price-card {
+    display: inline-flex;
+    align-items: center;
+    gap: 16px;
+    background: var(--ink);
+    color: white;
+    padding: 20px 36px;
+    border-radius: 12px;
+    margin-bottom: 12px;
+  }
+  .price-main {
+    font-family: 'DM Serif Display', serif;
+    font-size: 2.4rem;
+    line-height: 1;
+    color: white;
+  }
+  .price-period {
+    font-size: 0.85rem;
+    color: rgba(255,255,255,0.55);
+    font-weight: 300;
+    margin-top: 2px;
+  }
+  .price-divider {
+    width: 1px;
+    height: 44px;
+    background: rgba(255,255,255,0.15);
+  }
+  .price-detail {
+    text-align: left;
+    font-size: 0.82rem;
+    color: rgba(255,255,255,0.75);
+    line-height: 1.6;
+    font-weight: 300;
+  }
+  .price-detail strong {
+    color: white;
+    font-weight: 500;
+    display: block;
+    margin-bottom: 2px;
+  }
+  .vs-note {
+    font-size: 0.78rem;
+    color: var(--ink-light);
+    opacity: 0.7;
+    font-style: italic;
+  }
+
+  /* ── SECTION ── */
+  .section {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 0 40px 56px;
+  }
+  .section-label {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 8px;
+  }
+  .section h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.75rem;
+    color: var(--ink);
+    margin-bottom: 18px;
+    line-height: 1.25;
+  }
+
+  /* ── WHAT'S INCLUDED ── */
+  .included-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+  .included-item {
+    background: var(--warm-white);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px 22px;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .included-item:hover {
+    border-color: var(--sage);
+    box-shadow: 0 4px 16px var(--shadow);
+  }
+  .included-icon {
+    font-size: 1.35rem;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .included-item h4 {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 4px;
+  }
+  .included-item p {
+    font-size: 0.8rem;
+    color: var(--ink-light);
+    font-weight: 300;
+    line-height: 1.5;
+  }
+
+  /* ── FORM ── */
+  .form-card {
+    background: var(--warm-white);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 40px;
+    box-shadow: 0 4px 32px var(--shadow);
+  }
+  .form-intro {
+    font-size: 0.95rem;
+    color: var(--ink-light);
+    margin-bottom: 28px;
+    font-weight: 300;
+    line-height: 1.65;
+    border-left: 3px solid var(--sage);
+    padding-left: 16px;
+  }
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .form-group.full { grid-column: 1 / -1; }
+  .form-group label {
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ink-light);
+  }
+  .form-group input, .form-group textarea {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 11px 14px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    color: var(--ink);
+    background: var(--cream);
+    transition: border-color 0.2s, box-shadow 0.2s;
+    outline: none;
+  }
+  .form-group input:focus, .form-group textarea:focus {
+    border-color: var(--sage);
+    box-shadow: 0 0 0 3px rgba(74,124,111,0.1);
+    background: white;
+  }
+  .form-group textarea { resize: vertical; min-height: 80px; }
+
+  /* Deliverables */
+  .deliverables-label {
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ink-light);
+    margin-bottom: 12px;
+    margin-top: 8px;
+  }
+  .deliverables-sub {
+    font-size: 0.8rem;
+    color: var(--ink-light);
+    font-weight: 300;
+    margin-bottom: 14px;
+  }
+  .deliverables-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .check-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    background: var(--cream);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 14px;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+    user-select: none;
+  }
+  .check-item:hover { border-color: var(--sage); background: var(--sage-light); }
+  .check-item input[type="checkbox"] { display: none; }
+  .check-box {
+    width: 18px;
+    height: 18px;
+    border: 2px solid var(--border);
+    border-radius: 4px;
+    flex-shrink: 0;
+    margin-top: 1px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: border-color 0.15s, background 0.15s;
+    font-size: 0.7rem;
+    color: white;
+  }
+  .check-item.checked { border-color: var(--sage); background: var(--sage-light); }
+  .check-item.checked .check-box { background: var(--sage); border-color: var(--sage); }
+  .check-text h5 { font-size: 0.85rem; font-weight: 600; color: var(--ink); margin-bottom: 2px; }
+  .check-text p { font-size: 0.75rem; color: var(--ink-light); font-weight: 300; line-height: 1.4; }
+
+  .notes-area {
+    margin-bottom: 28px;
+  }
+
+  /* CTA */
+  .cta-block {
+    border-top: 1px solid var(--border);
+    padding-top: 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .btn-submit {
+    background: var(--sage);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 15px 28px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    letter-spacing: 0.02em;
+  }
+  .btn-submit:hover { background: #3d6b5f; transform: translateY(-1px); }
+  .btn-submit:active { transform: translateY(0); }
+
+  .btn-pay {
+    background: var(--ink);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 17px 28px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    letter-spacing: 0.02em;
+    text-decoration: none;
+  }
+  .btn-pay:hover { background: #2d2d4a; transform: translateY(-1px); }
+  .pay-note {
+    font-size: 0.75rem;
+    color: var(--ink-light);
+    opacity: 0.7;
+    text-align: center;
+    font-style: italic;
+  }
+
+  /* ── SUCCESS STATE ── */
+  .success-card {
+    display: none;
+    background: var(--sage-light);
+    border: 1px solid var(--sage);
+    border-radius: 16px;
+    padding: 40px;
+    text-align: center;
+  }
+  .success-card h3 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.6rem;
+    color: var(--sage);
+    margin: 16px 0 10px;
+  }
+  .success-card p { color: var(--ink-light); font-size: 0.95rem; margin-bottom: 24px; }
+
+  /* ── TRUST ── */
+  .trust-row {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 36px 40px;
+    max-width: 860px;
+    margin: 0 auto;
+    border-top: 1px solid var(--border);
+  }
+  .trust-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.8rem;
+    color: var(--ink-light);
+    font-weight: 400;
+  }
+  .trust-item span:first-child { font-size: 1rem; }
+
+  /* ── FOOTER ── */
+  footer {
+    text-align: center;
+    padding: 24px 40px;
+    font-size: 0.75rem;
+    color: var(--ink-light);
+    opacity: 0.6;
+    border-top: 1px solid var(--border);
+  }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .hero, .section { animation: fadeUp 0.6s ease both; }
+  .section { animation-delay: 0.15s; }
+
+  @media (max-width: 600px) {
+    .header { padding: 16px 20px; }
+    .hero, .section { padding-left: 20px; padding-right: 20px; }
+    .form-row, .deliverables-grid { grid-template-columns: 1fr; }
+    .price-card { flex-direction: column; gap: 10px; text-align: center; }
+    .price-divider { width: 60px; height: 1px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <span class="header-name">Stephen Samchuck</span>
+  <span class="header-tag">Fractional Sales Operations</span>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="eyebrow">Limited Availability</div>
+  <h1>Your sales team is working hard.<br><em>Your systems should too.</em></h1>
+  <p class="hero-sub">A fractional BDM engagement for growing companies who need the output of a senior Sales Operations Manager — without the $150K salary. 16 hours of live collaboration every month, plus 20 hours of implemented, repeatable deliverables you keep forever.</p>
+
+  <div class="price-card">
+    <div>
+      <div class="price-main">$1,600</div>
+      <div class="price-period">USD / month</div>
+    </div>
+    <div class="price-divider"></div>
+    <div class="price-detail">
+      <strong>36 hours/month included</strong>
+      16 hrs Office / Zoom / Meet<br>20 hrs Deliverables · Implemented · Repeatable
+    </div>
+  </div>
+  <div class="vs-note">vs. $12,500+/month for a full-time Sales Manager</div>
+</section>
+
+<!-- WHAT'S INCLUDED -->
+<section class="section">
+  <div class="section-label">What you get</div>
+  <h2>Everything a high-performing sales org needs to run.</h2>
+  <div class="included-grid">
+    <div class="included-item">
+      <div class="included-icon">🔍</div>
+      <div>
+        <h4>CRM Audit & Setup</h4>
+        <p>Pipedrive, Salesforce or your existing CRM — cleaned up, configured, and actually used.</p>
+      </div>
+    </div>
+    <div class="included-item">
+      <div class="included-icon">🚀</div>
+      <div>
+        <h4>Lead Funnel Build</h4>
+        <p>Proven repeatable funnel from lead capture to close — automated where it counts.</p>
+      </div>
+    </div>
+    <div class="included-item">
+      <div class="included-icon">📊</div>
+      <div>
+        <h4>KPI Dashboard</h4>
+        <p>Live visibility into pipeline health, conversion rates and revenue forecast.</p>
+      </div>
+    </div>
+    <div class="included-item">
+      <div class="included-icon">📋</div>
+      <div>
+        <h4>Process Documentation</h4>
+        <p>Playbooks and workflows your team can follow — and new hires can onboard from.</p>
+      </div>
+    </div>
+    <div class="included-item">
+      <div class="included-icon">⚡</div>
+      <div>
+        <h4>Automation & Enablement</h4>
+        <p>Zapier, Coefficient, and native CRM automations that eliminate manual busywork.</p>
+      </div>
+    </div>
+    <div class="included-item">
+      <div class="included-icon">🤝</div>
+      <div>
+        <h4>Weekly Coaching</h4>
+        <p>Direct access for your team on tools, strategy, territory and pipeline reviews.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FORM -->
+<section class="section">
+  <div class="section-label">Get started</div>
+  <h2>Tell me where to focus first.</h2>
+
+  <div class="form-card" id="formCard">
+    <p class="form-intro">
+      Skip the discovery calls. Select your priority focus areas, add any context, and proceed to payment. I'll review your selections before session one — so your first 16 hours of live collaboration and 20 hours of deliverables start with exactly what moves your business forward.
+    </p>
+
+    <form id="intakeForm" action="https://formspree.io/f/xjgakoza" method="POST">
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Your Name</label>
+          <input type="text" name="name" placeholder="Jane Smith" required>
+        </div>
+        <div class="form-group">
+          <label>Company</label>
+          <input type="text" name="company" placeholder="Acme Corp" required>
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" name="email" placeholder="jane@acmecorp.com" required>
+        </div>
+        <div class="form-group">
+          <label>Phone (optional)</label>
+          <input type="tel" name="phone" placeholder="+1 604 555 0100">
+        </div>
+      </div>
+
+      <div class="deliverables-label">Priority Focus Areas</div>
+      <p class="deliverables-sub">Select everything you want addressed in Month 1. We'll sequence and prioritize together.</p>
+
+      <div class="deliverables-grid">
+        <label class="check-item" onclick="toggleCheck(this)">
+          <input type="checkbox" name="deliverables" value="CRM Audit & Setup">
+          <div class="check-box">✓</div>
+          <div class="check-text">
+            <h5>CRM Audit & Setup</h5>
+            <p>Clean data, proper stages, right automations</p>
+          </div>
+        </label>
+        <label class="check-item" onclick="toggleCheck(this)">
+          <input type="checkbox" name="deliverables" value="Lead Funnel Build">
+          <div class="check-box">✓</div>
+          <div class="check-text">
+            <h5>Lead Funnel Build</h5>
+            <p>End-to-end funnel from capture to close</p>
+          </div>
+        </label>
+        <label class="check-item" onclick="toggleCheck(this)">
+          <input type="checkbox" name="deliverables" value="KPI Dashboard">
+          <div class="check-box">✓</div>
+          <div class="check-text">
+            <h5>KPI Dashboard</h5>
+            <p>Live pipeline & revenue visibility</p>
+          </div>
+        </label>
+        <label class="check-item" onclick="toggleCheck(this)">
+          <input type="checkbox" name="deliverables" value="Process Documentation">
+          <div class="check-box">✓</div>
+          <div class="check-text">
+            <h5>Process Documentation</h5>
+            <p>Playbooks, SOPs & onboarding assets</p>
+          </div>
+        </label>
+        <label class="check-item" onclick="toggleCheck(this)">
+          <input type="checkbox" name="deliverables" value="Sales Automation">
+          <div class="check-box">✓</div>
+          <div class="check-text">
+            <h5>Sales Automation</h5>
+            <p>Zapier, Coefficient & CRM workflows</p>
+          </div>
+        </label>
+        <label class="check-item" onclick="toggleCheck(this)">
+          <input type="checkbox" name="deliverables" value="Team Coaching & Enablement">
+          <div class="check-box">✓</div>
+          <div class="check-text">
+            <h5>Team Coaching & Enablement</h5>
+            <p>Tool training, territory & pipeline reviews</p>
+          </div>
+        </label>
+      </div>
+
+      <div class="notes-area">
+        <div class="form-group full">
+          <label>Additional Context / Notes</label>
+          <textarea name="notes" placeholder="e.g. We use HubSpot, have 3 reps, and our biggest problem is deals stalling after the demo..."></textarea>
+        </div>
+      </div>
+
+      <!-- Hidden field to capture selections summary -->
+      <input type="hidden" name="_subject" value="New BDM Retainer Inquiry — Stephen Samchuck">
+      <input type="hidden" name="_next" value="#confirmed">
+
+      <div class="cta-block">
+        <button type="submit" class="btn-submit" id="submitBtn">
+          <span>📋</span> Save My Priorities & Proceed to Payment
+        </button>
+        <p class="pay-note">After submitting, you'll be taken directly to the secure payment page.</p>
+      </div>
+    </form>
+  </div>
+
+  <!-- SUCCESS + PAY -->
+  <div class="success-card" id="successCard">
+    <div style="font-size:2.5rem">✅</div>
+    <h3>Priorities received.</h3>
+    <p>I'll review your selections before our first session so we start with exactly what matters to you.<br>One last step — confirm your first month below.</p>
+    <a href="https://buy.stripe.com/28E8wQfdC6490ZdgWz00000" class="btn-pay" target="_blank" rel="noopener">
+      🔒 Pay $1,600 — Start This Month
+    </a>
+    <p class="pay-note" style="margin-top:10px">Secure payment via Stripe · Cancel anytime · Receipt emailed instantly</p>
+  </div>
+</section>
+
+<!-- TRUST -->
+<div class="trust-row">
+  <div class="trust-item"><span>🔒</span><span>Secure Stripe payment</span></div>
+  <div class="trust-item"><span>📍</span><span>Vancouver, BC — Remote & In-Person</span></div>
+  <div class="trust-item"><span>🗓️</span><span>Cancel anytime</span></div>
+  <div class="trust-item"><span>💬</span><span>linkedin.com/in/kssamchuck</span></div>
+</div>
+
+<footer>
+  © 2026 Stephen Samchuck · Fractional Sales Operations · Greater Vancouver, BC
+</footer>
+
+<script>
+  function toggleCheck(label) {
+    const cb = label.querySelector('input[type="checkbox"]');
+    cb.checked = !cb.checked;
+    label.classList.toggle('checked', cb.checked);
+  }
+
+  document.getElementById('intakeForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const btn = document.getElementById('submitBtn');
+    btn.textContent = 'Sending...';
+    btn.disabled = true;
+
+    // Check if Formspree ID is set
+    const action = this.action;
+    if (action.includes('PLACEHOLDER')) {
+      // Demo mode — skip actual submission
+      showSuccess();
+      return;
+    }
+
+    try {
+      const data = new FormData(this);
+      const resp = await fetch(this.action, {
+        method: 'POST',
+        body: data,
+        headers: { 'Accept': 'application/json' }
+      });
+      if (resp.ok) { showSuccess(); }
+      else { btn.textContent = 'Error — please try again'; btn.disabled = false; }
+    } catch(err) {
+      showSuccess(); // fallback for demo
+    }
+  });
+
+  function showSuccess() {
+    document.getElementById('formCard').style.display = 'none';
+    const s = document.getElementById('successCard');
+    s.style.display = 'block';
+    s.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+</script>
+
+</body>
+</html>
