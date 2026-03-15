@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Session Confirmed — Revenue Engine Audit™</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#0c2340;--navy-mid:#163554;--blue:#1a5276;
+    --gold:#c8973a;--gold-light:#f0c060;
+    --green:#1a6b4a;--green-light:#e8f7f0;
+    --red:#c0392b;--red-light:#fdecea;
+    --amber:#d35400;--amber-light:#fff0e6;
+    --cream:#f8f6f2;--white:#fff;
+    --text:#1a1a2e;--text-mid:#3d4a5c;--text-light:#6b7a8d;
+    --border:#dde4ed;--shadow:0 4px 24px rgba(12,35,64,.09);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Inter',sans-serif;background:var(--cream);color:var(--text);line-height:1.6;min-height:100vh}
+
+  .topbar{background:var(--navy);padding:14px 32px;display:flex;align-items:center;justify-content:space-between}
+  .topbar-brand{font-family:'Playfair Display',serif;font-size:1rem;color:#fff}
+  .topbar-brand span{font-family:'Inter',sans-serif;font-size:.7rem;font-weight:600;color:rgba(255,255,255,.4);letter-spacing:.1em;text-transform:uppercase;margin-left:10px}
+
+  .hero{background:linear-gradient(140deg,var(--navy) 0%,#163554 60%,#1a4a6a 100%);color:#fff;padding:60px 32px 52px;text-align:center}
+  .confirmed-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(26,107,74,.25);border:1px solid rgba(26,107,74,.45);color:#5dd4a0;padding:7px 20px;border-radius:20px;font-size:.75rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:22px}
+  .hero h1{font-family:'Playfair Display',serif;font-size:clamp(1.8rem,4vw,2.8rem);line-height:1.18;margin-bottom:14px}
+  .hero h1 em{color:var(--gold-light);font-style:italic}
+  .hero-sub{font-size:.95rem;color:rgba(255,255,255,.68);max-width:520px;margin:0 auto;font-weight:300;line-height:1.75}
+
+  .wrap{max-width:720px;margin:0 auto;padding:40px 20px 80px}
+
+  /* Score summary card */
+  .score-card{background:var(--navy);border-radius:16px;padding:28px 32px;margin-bottom:24px;color:#fff;display:flex;gap:24px;flex-wrap:wrap;align-items:center}
+  .sc-main{text-align:center;min-width:110px}
+  .sc-num{font-family:'Playfair Display',serif;font-size:2.6rem;color:var(--gold-light);line-height:1}
+  .sc-label{font-size:.68rem;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.06em;margin-top:4px}
+  .sc-divider{width:1px;background:rgba(255,255,255,.12);align-self:stretch;min-height:60px}
+  .sc-details{flex:1}
+  .sc-tier{font-size:.8rem;font-weight:700;margin-bottom:6px}
+  .sc-leakage{font-family:'Playfair Display',serif;font-size:1.5rem;color:#ff8878;line-height:1;margin-bottom:4px}
+  .sc-leakage-label{font-size:.7rem;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.05em}
+
+  /* Progress steps */
+  .progress-steps{background:#fff;border:1px solid var(--border);border-radius:16px;padding:28px 32px;margin-bottom:24px;box-shadow:var(--shadow)}
+  .ps-title{font-size:.7rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:18px}
+  .ps-step{display:flex;align-items:flex-start;gap:14px;margin-bottom:16px}
+  .ps-step:last-child{margin-bottom:0}
+  .ps-dot{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:700;flex-shrink:0;margin-top:2px}
+  .ps-dot.done{background:var(--green);color:#fff}
+  .ps-dot.active{background:var(--gold);color:#fff}
+  .ps-dot.pending{background:var(--border);color:var(--text-light)}
+  .ps-text h4{font-size:.9rem;font-weight:600;color:var(--text);margin-bottom:2px}
+  .ps-text p{font-size:.78rem;color:var(--text-light)}
+
+  /* Reflection questions */
+  .rq-card{background:#fff;border:1px solid var(--border);border-radius:16px;padding:32px;margin-bottom:24px;box-shadow:var(--shadow)}
+  .rq-title{font-size:.7rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:8px}
+  .rq-card h3{font-family:'Playfair Display',serif;font-size:1.3rem;color:var(--navy);margin-bottom:8px}
+  .rq-card > p{font-size:.85rem;color:var(--text-mid);margin-bottom:22px;line-height:1.65;border-left:3px solid var(--gold);padding-left:14px}
+
+  .rq-loading{text-align:center;padding:32px;color:var(--text-light)}
+  .rq-spinner{display:inline-block;width:36px;height:36px;border:3px solid var(--border);border-top-color:var(--gold);border-radius:50%;animation:spin 1s linear infinite;margin-bottom:12px}
+  @keyframes spin{to{transform:rotate(360deg)}}
+
+  .q-block{background:var(--cream);border:1px solid var(--border);border-radius:12px;padding:20px 22px;margin-bottom:14px}
+  .q-block-num{font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin-bottom:6px}
+  .q-block-text{font-size:.93rem;font-weight:600;color:var(--text);margin-bottom:10px;line-height:1.45}
+  .q-block-why{font-size:.76rem;color:var(--text-light);font-style:italic}
+  .q-block textarea{width:100%;margin-top:12px;border:1.5px solid var(--border);border-radius:8px;padding:10px 13px;font-family:'Inter',sans-serif;font-size:.86rem;color:var(--text);background:#fff;outline:none;resize:vertical;min-height:72px;transition:border-color .2s}
+  .q-block textarea:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(26,82,118,.1)}
+
+  /* Submit */
+  .submit-card{background:#fff;border:1px solid var(--border);border-radius:16px;padding:32px;text-align:center;box-shadow:var(--shadow)}
+  .submit-card h3{font-family:'Playfair Display',serif;font-size:1.3rem;color:var(--navy);margin-bottom:8px}
+  .submit-card p{font-size:.85rem;color:var(--text-mid);margin-bottom:22px;line-height:1.65}
+  .btn{border:none;border-radius:10px;padding:14px 36px;font-family:'Inter',sans-serif;font-size:.92rem;font-weight:700;cursor:pointer;transition:background .2s,transform .15s;letter-spacing:.02em}
+  .btn-navy{background:var(--navy);color:#fff;box-shadow:0 4px 16px rgba(12,35,64,.2)}
+  .btn-navy:hover{background:#081828;transform:translateY(-1px)}
+  .btn-navy:disabled{opacity:.6;cursor:not-allowed;transform:none}
+
+  /* Success */
+  .success-card{display:none;background:var(--green-light);border:1px solid var(--green);border-radius:16px;padding:36px;text-align:center}
+  .success-card.on{display:block}
+  .success-card h3{font-family:'Playfair Display',serif;font-size:1.5rem;color:var(--green);margin:14px 0 8px}
+  .success-card p{font-size:.88rem;color:var(--text-mid);line-height:1.65}
+
+  @media(max-width:600px){
+    .score-card{flex-direction:column;gap:16px}
+    .sc-divider{width:100%;height:1px;min-height:0}
+    .wrap{padding:28px 14px 60px}
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-brand">Stephen Samchuck <span>Revenue Engine Audit™</span></div>
+</div>
+
+<div class="hero">
+  <div class="confirmed-badge">✅ Strategy Session Confirmed</div>
+  <h1>Your session is booked.<br><em>Let's make it count.</em></h1>
+  <p class="hero-sub">Complete the 3 reflection questions below before your session. Stephen will review your answers in advance — your time together starts at a higher level.</p>
+</div>
+
+<div class="wrap">
+
+  <!-- Score summary -->
+  <div class="score-card" id="scoreCard">
+    <div class="sc-main">
+      <div class="sc-num" id="scScore">—</div>
+      <div class="sc-label">Your Score / 165</div>
+    </div>
+    <div class="sc-divider"></div>
+    <div class="sc-details">
+      <div class="sc-tier" id="scTier">Loading your results…</div>
+      <div class="sc-leakage" id="scLeakage">—</div>
+      <div class="sc-leakage-label">Estimated Annual Revenue Leakage</div>
+    </div>
+  </div>
+
+  <!-- Progress steps -->
+  <div class="progress-steps">
+    <div class="ps-title">Your Path to the Strategy Session</div>
+    <div class="ps-step">
+      <div class="ps-dot done">✓</div>
+      <div class="ps-text"><h4>Revenue Engine Audit™ Completed</h4><p>Your scores and revenue leakage estimate are ready.</p></div>
+    </div>
+    <div class="ps-step">
+      <div class="ps-dot done">✓</div>
+      <div class="ps-text"><h4>Strategy Session Booked & Paid</h4><p>$497 session fee — credited toward your retainer if you proceed.</p></div>
+    </div>
+    <div class="ps-step">
+      <div class="ps-dot active">3</div>
+      <div class="ps-text"><h4>Complete Your Reflection Questions</h4><p>3 questions based on your specific audit gaps. Takes ~5 minutes.</p></div>
+    </div>
+    <div class="ps-step">
+      <div class="ps-dot pending">4</div>
+      <div class="ps-text"><h4>Receive Your Prep Document</h4><p>A branded session prep PDF arrives in your inbox 24 hours before your call.</p></div>
+    </div>
+    <div class="ps-step">
+      <div class="ps-dot pending">5</div>
+      <div class="ps-text"><h4>Strategy Session with Stephen</h4><p>Arrive informed. Leave with a 90-day implementation roadmap.</p></div>
+    </div>
+  </div>
+
+  <!-- Reflection questions -->
+  <div class="rq-card">
+    <div class="rq-title">Step 3 of 5 — Required Before Your Session</div>
+    <h3>Your Personalized Reflection Questions</h3>
+    <p>These questions were generated from your audit results. Your answers help Stephen prepare a session that addresses your specific situation — not a generic conversation.</p>
+
+    <div id="rqContent">
+      <div class="rq-loading">
+        <div class="rq-spinner"></div>
+        <div>Generating your personalized questions…</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Submit -->
+  <div class="submit-card" id="submitCard" style="display:none">
+    <h3>Ready to Submit Your Answers?</h3>
+    <p>Stephen will review these before your session. You'll receive a prep document 24 hours before your call with your full audit data, scores, and session agenda.</p>
+    <button class="btn btn-navy" id="submitBtn" onclick="submitAnswers()">Send My Answers to Stephen →</button>
+  </div>
+
+  <!-- Success -->
+  <div class="success-card" id="successCard">
+    <div style="font-size:2.5rem">🎯</div>
+    <h3>Answers received. You're prepared.</h3>
+    <p>Stephen will review your audit data and answers before your session.<br>Watch for your <strong>Session Prep Document</strong> arriving 24 hours before your call.<br><br>
+    <em style="color:var(--text-light)">Check your spam folder if it doesn't arrive — add <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="e4979081948c818aa49d8b9196808b89858d8aca878b89">[email&#160;protected]</a> to your contacts now.</em></p>
+  </div>
+
+</div>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+const GEMINI_KEY = "AIzaSyDtt6X98PJ_MUr6wkf-o6NtPqvvo8JbgEQ";
+const FORMSPREE  = "https://formspree.io/f/xjgakoza";
+
+// ── Read URL params passed from audit tool ──
+const params = new URLSearchParams(window.location.search);
+const prospect = {
+  name:     params.get('name')     || 'Prospect',
+  company:  params.get('co')       || 'Your Company',
+  role:     params.get('role')     || 'Business Owner',
+  industry: params.get('ind')      || 'Business',
+  teamSize: params.get('ts')       || 'Unknown',
+  email:    params.get('em')       || '',
+  score:    parseInt(params.get('score'))    || 0,
+  leakage:  parseInt(params.get('leakage'))  || 0,
+  tier:     params.get('tier')     || 'Revenue Leakage',
+  gaps:     params.get('gaps')     || '',   // top 3 gap titles, comma separated
+  cats:     params.get('cats')     || ''    // category scores, pipe separated "CRM:2.1|Pipeline:1.8"
+};
+
+// ── Populate score card ──
+document.getElementById('scScore').textContent  = prospect.score || '—';
+document.getElementById('scTier').textContent   = prospect.tier;
+document.getElementById('scLeakage').textContent = prospect.leakage
+  ? '$' + prospect.leakage.toLocaleString()
+  : 'See your audit report';
+
+// ── Generate reflection questions via Gemini ──
+async function generateQuestions(){
+  if(GEMINI_KEY === "AIzaSyDtt6X98PJ_MUr6wkf-o6NtPqvvo8JbgEQ"){
+    renderFallbackQuestions();
+    return;
+  }
+
+  const prompt = `You are Stephen Samchuck, a Fractional Sales Operations expert. A prospect just completed a Revenue Engine Audit™ and booked a paid strategy session. Generate exactly 3 personalized reflection questions based on their specific audit results.
+
+PROSPECT: ${prospect.name}, ${prospect.role} at ${prospect.company}
+INDUSTRY: ${prospect.industry} | TEAM SIZE: ${prospect.teamSize}
+AUDIT SCORE: ${prospect.score}/165 | TIER: ${prospect.tier}
+ESTIMATED REVENUE LEAKAGE: $${prospect.leakage.toLocaleString()}
+TOP GAPS IDENTIFIED: ${prospect.gaps}
+CATEGORY SCORES: ${prospect.cats}
+
+RULES:
+- Each question must be DIRECTLY tied to one of their low-scoring areas
+- Questions should make the prospect THINK and REFLECT — not just answer yes/no
+- Each question should reveal information Stephen needs to make the session valuable
+- Tone: thoughtful, non-judgmental, curious — like a trusted advisor preparing for a meaningful conversation
+- Questions should be uncomfortable enough to be honest but safe enough to answer
+
+Respond in this exact JSON format only, no markdown:
+[
+  {
+    "num": "01",
+    "question": "The actual question text",
+    "why": "Why Stephen is asking this — what it reveals (1 sentence, shown to prospect)",
+    "gap": "Which audit area this relates to"
+  },
+  {
+    "num": "02",
+    "question": "...",
+    "why": "...",
+    "gap": "..."
+  },
+  {
+    "num": "03",
+    "question": "...",
+    "why": "...",
+    "gap": "..."
+  }
+]`;
+
+  try{
+    const resp = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_KEY}`,
+      { method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({
+          contents:[{parts:[{text:prompt}]}],
+          generationConfig:{temperature:.7, maxOutputTokens:600}
+        })
+      }
+    );
+    const data = await resp.json();
+    const text = data.candidates[0].content.parts[0].text.replace(/```json|```/g,'').trim();
+    const questions = JSON.parse(text);
+    renderQuestions(questions);
+  } catch(e){
+    console.error(e);
+    renderFallbackQuestions();
+  }
+}
+
+function renderQuestions(questions){
+  const html = questions.map(q => `
+    <div class="q-block" id="qblock-${q.num}">
+      <div class="q-block-num">Question ${q.num} · ${q.gap}</div>
+      <div class="q-block-text">${q.question}</div>
+      <div class="q-block-why">💡 Why Stephen is asking: ${q.why}</div>
+      <textarea id="ans-${q.num}" placeholder="Take a few minutes to think about this honestly…" rows="3"></textarea>
+    </div>
+  `).join('');
+
+  document.getElementById('rqContent').innerHTML = html;
+  document.getElementById('submitCard').style.display = 'block';
+
+  // Store questions for submission
+  window._questions = questions;
+}
+
+function renderFallbackQuestions(){
+  // Fallback questions based on common low-score patterns
+  const fallback = [
+    { num:"01", question:"Walk me through exactly what happens from the moment a new lead comes in to the moment someone first speaks with them. Be specific about who does what and how long each step takes.", why:"This reveals process gaps and automation opportunities immediately.", gap:"Sales Process" },
+    { num:"02", question:"If you had to bet your salary on your revenue forecast for next quarter, how confident would you be — and what data would you be basing that bet on?", why:"Forecasting confidence reveals the quality of pipeline data and sales visibility.", gap:"Forecasting & Intelligence" },
+    { num:"03", question:"Think about the last 3 deals you lost. What was the real reason — not the reason you told yourself, but the actual reason the prospect chose not to move forward?", why:"Win/loss honesty reveals competitive positioning gaps and process weaknesses.", gap:"Sales Strategy" }
+  ];
+  renderQuestions(fallback);
+}
+
+async function submitAnswers(){
+  const btn = document.getElementById('submitBtn');
+  const answers = (window._questions || []).map(q => ({
+    question: q.question,
+    gap: q.gap,
+    answer: document.getElementById(`ans-${q.num}`)?.value || ''
+  }));
+
+  if(answers.some(a => a.answer.trim().length < 10)){
+    alert('Please answer all 3 questions before submitting. Even a few sentences helps Stephen prepare.');
+    return;
+  }
+
+  btn.textContent = 'Sending…';
+  btn.disabled = true;
+
+  const payload = {
+    _subject: `Pre-Session Answers — ${prospect.name} at ${prospect.company}`,
+    prospect_name:    prospect.name,
+    prospect_company: prospect.company,
+    prospect_role:    prospect.role,
+    prospect_email:   prospect.email,
+    audit_score:      prospect.score,
+    audit_tier:       prospect.tier,
+    leakage_estimate: '$' + prospect.leakage.toLocaleString(),
+    top_gaps:         prospect.gaps,
+    q1_question:      answers[0]?.question || '',
+    q1_answer:        answers[0]?.answer   || '',
+    q2_question:      answers[1]?.question || '',
+    q2_answer:        answers[1]?.answer   || '',
+    q3_question:      answers[2]?.question || '',
+    q3_answer:        answers[2]?.answer   || '',
+  };
+
+  try{
+    const resp = await fetch(FORMSPREE, {
+      method:'POST',
+      headers:{'Accept':'application/json','Content-Type':'application/json'},
+      body: JSON.stringify(payload)
+    });
+    if(resp.ok){
+      document.getElementById('submitCard').style.display = 'none';
+      document.getElementById('successCard').classList.add('on');
+      document.getElementById('successCard').scrollIntoView({behavior:'smooth'});
+    } else {
+      btn.textContent = 'Error — please try again';
+      btn.disabled = false;
+    }
+  } catch(e){
+    // Show success anyway — Form

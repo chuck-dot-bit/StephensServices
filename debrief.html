@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Session Debrief — Revenue Engine Audit™</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#0c2340;--blue:#1a5276;
+    --gold:#c8973a;--gold-light:#f0c060;
+    --green:#1a6b4a;--green-light:#e8f7f0;
+    --red:#c0392b;--cream:#f8f6f2;--white:#fff;
+    --text:#1a1a2e;--text-mid:#3d4a5c;--text-light:#6b7a8d;
+    --border:#dde4ed;--shadow:0 4px 24px rgba(12,35,64,.09);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Inter',sans-serif;background:var(--cream);color:var(--text);min-height:100vh}
+
+  .topbar{background:var(--navy);padding:14px 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50}
+  .topbar-brand{font-family:'Playfair Display',serif;font-size:.95rem;color:#fff}
+  .topbar-tag{font-size:.7rem;font-weight:600;color:rgba(255,255,255,.45);letter-spacing:.1em;text-transform:uppercase}
+
+  /* Mobile-first hero — compact */
+  .hero{background:linear-gradient(135deg,var(--navy),#1a3a5c);color:#fff;padding:32px 20px 28px;text-align:center}
+  .hero h1{font-family:'Playfair Display',serif;font-size:1.65rem;line-height:1.2;margin-bottom:8px}
+  .hero h1 em{color:var(--gold-light);font-style:italic}
+  .hero p{font-size:.85rem;color:rgba(255,255,255,.65);line-height:1.65}
+  .timer-pill{display:inline-flex;align-items:center;gap:6px;background:rgba(200,151,58,.18);border:1px solid rgba(200,151,58,.35);color:var(--gold-light);padding:5px 14px;border-radius:16px;font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:14px}
+
+  .wrap{max-width:600px;margin:0 auto;padding:24px 16px 80px}
+
+  .card{background:#fff;border:1px solid var(--border);border-radius:14px;padding:24px;margin-bottom:18px;box-shadow:var(--shadow)}
+  .card-label{font-size:.68rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:12px}
+
+  /* Prospect lookup */
+  .lookup-row{display:flex;gap:10px}
+  .lookup-row input{flex:1;border:1.5px solid var(--border);border-radius:8px;padding:12px 14px;font-family:'Inter',sans-serif;font-size:.9rem;color:var(--text);background:var(--cream);outline:none;transition:border-color .2s}
+  .lookup-row input:focus{border-color:var(--blue);background:#fff}
+  .btn-sm{border:none;border-radius:8px;padding:12px 18px;font-family:'Inter',sans-serif;font-size:.85rem;font-weight:700;cursor:pointer;transition:background .2s;white-space:nowrap}
+  .btn-navy-sm{background:var(--navy);color:#fff}
+  .btn-navy-sm:hover{background:#081828}
+
+  .prospect-found{display:none;background:var(--green-light);border:1px solid var(--green);border-radius:10px;padding:14px 16px;margin-top:12px}
+  .prospect-found.on{display:flex;align-items:center;gap:12px}
+  .pf-icon{font-size:1.4rem}
+  .pf-name{font-size:.9rem;font-weight:700;color:var(--green)}
+  .pf-meta{font-size:.76rem;color:var(--text-mid)}
+
+  /* Form fields */
+  .fg{display:flex;flex-direction:column;gap:6px;margin-bottom:16px}
+  .fg:last-child{margin-bottom:0}
+  .fg label{font-size:.72rem;font-weight:700;color:var(--text-mid);letter-spacing:.04em;text-transform:uppercase}
+  .fg textarea,.fg select,.fg input[type=text]{border:1.5px solid var(--border);border-radius:8px;padding:11px 13px;font-family:'Inter',sans-serif;font-size:.88rem;color:var(--text);background:var(--cream);outline:none;transition:border-color .2s;width:100%}
+  .fg textarea:focus,.fg select:focus,.fg input[type=text]:focus{border-color:var(--blue);background:#fff}
+  .fg textarea{resize:vertical}
+
+  /* Sentiment buttons */
+  .sentiment-row{display:flex;gap:8px;flex-wrap:wrap}
+  .sent-btn{border:2px solid var(--border);border-radius:8px;padding:9px 14px;background:var(--cream);font-family:'Inter',sans-serif;font-size:.82rem;font-weight:600;cursor:pointer;transition:all .15s;color:var(--text-mid)}
+  .sent-btn:hover{border-color:var(--blue)}
+  .sent-btn.sel-hot{background:#e8f7f0;border-color:var(--green);color:var(--green)}
+  .sent-btn.sel-warm{background:#fff8ee;border-color:var(--gold);color:var(--gold)}
+  .sent-btn.sel-cool{background:#fff0e6;border-color:#d35400;color:#d35400}
+  .sent-btn.sel-cold{background:var(--cream);border-color:#999;color:#666}
+
+  /* Zoom paste area */
+  .zoom-area{border:2px dashed var(--border);border-radius:10px;padding:16px;background:var(--cream);transition:border-color .2s;cursor:text}
+  .zoom-area:focus-within{border-color:var(--blue);background:#fff}
+  .zoom-area textarea{border:none;background:transparent;padding:0;font-size:.84rem;line-height:1.6;width:100%;min-height:120px;resize:vertical;outline:none;font-family:'Inter',sans-serif;color:var(--text)}
+  .zoom-hint{font-size:.72rem;color:var(--text-light);margin-top:8px;display:flex;align-items:center;gap:6px}
+
+  /* Generate button */
+  .gen-zone{text-align:center;margin-top:8px}
+  .btn-generate{background:var(--navy);color:#fff;border:none;border-radius:12px;padding:16px 36px;font-family:'Inter',sans-serif;font-size:.95rem;font-weight:700;cursor:pointer;transition:background .2s,transform .15s;box-shadow:0 4px 16px rgba(12,35,64,.22);width:100%;letter-spacing:.02em}
+  .btn-generate:hover{background:#081828;transform:translateY(-1px)}
+  .btn-generate:disabled{opacity:.6;cursor:not-allowed;transform:none}
+
+  /* Loading */
+  .loading{display:none;text-align:center;padding:32px 20px}
+  .loading.on{display:block}
+  .l-spinner{display:inline-block;width:44px;height:44px;border:3px solid var(--border);border-top-color:var(--gold);border-radius:50%;animation:spin 1s linear infinite;margin-bottom:14px}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .l-steps{font-size:.82rem;color:var(--text-light);line-height:2.2}
+  .l-step{opacity:.35;transition:opacity .3s}
+  .l-step.on{opacity:1;color:var(--gold);font-weight:600}
+
+  /* Email output */
+  .email-output{display:none}
+  .email-output.on{display:block}
+
+  .email-card{background:#fff;border:1px solid var(--border);border-radius:14px;overflow:hidden;box-shadow:var(--shadow);margin-bottom:18px}
+  .email-header{background:var(--navy);padding:16px 20px;display:flex;align-items:center;justify-content:space-between}
+  .email-header span{font-size:.78rem;font-weight:700;color:rgba(255,255,255,.6);letter-spacing:.08em;text-transform:uppercase}
+  .email-header strong{font-size:.88rem;color:#fff}
+  .email-subject{padding:14px 20px;border-bottom:1px solid var(--border);background:#fafbfc}
+  .email-subject label{font-size:.68rem;font-weight:700;color:var(--text-light);text-transform:uppercase;letter-spacing:.08em;display:block;margin-bottom:4px}
+  .email-subject input{border:none;background:transparent;font-family:'Inter',sans-serif;font-size:.9rem;font-weight:600;color:var(--text);width:100%;outline:none}
+  .email-body{padding:20px}
+  .email-body textarea{border:1.5px solid var(--border);border-radius:8px;padding:14px;font-family:'Inter',sans-serif;font-size:.86rem;color:var(--text);line-height:1.7;width:100%;outline:none;min-height:320px;resize:vertical;transition:border-color .2s}
+  .email-body textarea:focus{border-color:var(--blue)}
+
+  .action-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px}
+  .btn-action{border:none;border-radius:10px;padding:14px;font-family:'Inter',sans-serif;font-size:.85rem;font-weight:700;cursor:pointer;transition:background .2s;display:flex;align-items:center;justify-content:center;gap:8px}
+  .btn-copy{background:var(--navy);color:#fff}
+  .btn-copy:hover{background:#081828}
+  .btn-gmail{background:#ea4335;color:#fff}
+  .btn-gmail:hover{background:#c5382c}
+
+  .stripe-reminder{background:linear-gradient(90deg,var(--navy),#1a3a5c);border-radius:12px;padding:20px 22px;color:#fff;margin-bottom:18px}
+  .stripe-reminder h4{font-size:.9rem;font-weight:700;margin-bottom:6px;color:var(--gold-light)}
+  .stripe-reminder p{font-size:.8rem;color:rgba(255,255,255,.7);line-height:1.6}
+  .stripe-reminder a{color:var(--gold-light);text-decoration:underline}
+
+  .new-session-btn{width:100%;border:2px solid var(--border);border-radius:10px;padding:14px;font-family:'Inter',sans-serif;font-size:.85rem;font-weight:600;cursor:pointer;background:transparent;color:var(--text-mid);transition:border-color .2s}
+  .new-session-btn:hover{border-color:var(--navy);color:var(--navy)}
+
+  @media(min-width:600px){
+    .wrap{padding:32px 24px 80px}
+    .hero{padding:44px 32px 38px}
+    .hero h1{font-size:2rem}
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-brand">Session Debrief</div>
+  <div class="topbar-tag">Revenue Engine Audit™</div>
+</div>
+
+<div class="hero">
+  <div class="timer-pill">⚡ 60-Second Debrief</div>
+  <h1>Session just ended?<br><em>Let's capture it.</em></h1>
+  <p>4 quick inputs + your Zoom summary. Gemini generates the follow-up email. You review and send.</p>
+</div>
+
+<div class="wrap">
+
+  <!-- Step 1: Prospect lookup / entry -->
+  <div class="card">
+    <div class="card-label">Step 1 — Who Was This Session With?</div>
+    <div class="lookup-row">
+      <input type="text" id="prospectEmail" placeholder="Prospect's email address">
+      <button class="btn-sm btn-navy-sm" onclick="lookupProspect()">Find →</button>
+    </div>
+    <div class="prospect-found" id="prospectFound">
+      <div class="pf-icon">🎯</div>
+      <div>
+        <div class="pf-name" id="pfName"></div>
+        <div class="pf-meta" id="pfMeta"></div>
+      </div>
+    </div>
+    <!-- Manual fallback -->
+    <div id="manualEntry" style="margin-top:14px;display:none">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
+        <div class="fg" style="margin:0"><label>First Name</label><input type="text" id="mFn" placeholder="Jane"></div>
+        <div class="fg" style="margin:0"><label>Last Name</label><input type="text" id="mLn" placeholder="Smith"></div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div class="fg" style="margin:0"><label>Company</label><input type="text" id="mCo" placeholder="Acme Corp"></div>
+        <div class="fg" style="margin:0"><label>Industry</label><input type="text" id="mInd" placeholder="B2B SaaS"></div>
+      </div>
+    </div>
+    <button onclick="toggleManual()" style="margin-top:10px;background:none;border:none;font-size:.76rem;color:var(--text-light);cursor:pointer;text-decoration:underline" id="manualToggle">Enter manually instead</button>
+  </div>
+
+  <!-- Step 2: Session sentiment -->
+  <div class="card">
+    <div class="card-label">Step 2 — How Did the Session Go?</div>
+    <div class="fg">
+      <label>Prospect Temperature</label>
+      <div class="sentiment-row">
+        <button class="sent-btn" onclick="setSent(this,'hot')">🔥 Hot — Ready to sign</button>
+        <button class="sent-btn" onclick="setSent(this,'warm')">⚡ Warm — Interested, needs nudge</button>
+        <button class="sent-btn" onclick="setSent(this,'cool')">🤔 Cool — Undecided</button>
+        <button class="sent-btn" onclick="setSent(this,'cold')">❄️ Cold — Not a fit</button>
+      </div>
+      <input type="hidden" id="sentiment" value="">
+    </div>
+    <div class="fg">
+      <label>Primary Objection Raised (if any)</label>
+      <select id="objection">
+        <option value="">None — smooth session</option>
+        <option value="budget">Budget — too expensive right now</option>
+        <option value="timing">Timing — not the right time</option>
+        <option value="authority">Authority — needs to check with partner/board</option>
+        <option value="trust">Trust — wants references first</option>
+        <option value="scope">Scope — not sure what's included</option>
+        <option value="diy">DIY — thinks they can handle it internally</option>
+        <option value="other">Other — see notes below</option>
+      </select>
+    </div>
+    <div class="fg">
+      <label>Their #1 Stated Problem (in their words)</label>
+      <input type="text" id="problem" placeholder="e.g. 'We're losing deals after the demo and don't know why'">
+    </div>
+  </div>
+
+  <!-- Step 3: Key moments -->
+  <div class="card">
+    <div class="card-label">Step 3 — Key Session Moments</div>
+    <div class="fg">
+      <label>What resonated most? (The moment they leaned in)</label>
+      <input type="text" id="resonated" placeholder="e.g. The revenue leakage number — they were shocked by $340K">
+    </div>
+    <div class="fg">
+      <label>What was agreed on as their #1 priority fix?</label>
+      <input type="text" id="priority" placeholder="e.g. CRM cleanup and automated lead routing">
+    </div>
+    <div class="fg">
+      <label>Any specific commitment or next step they mentioned?</label>
+      <input type="text" id="commitment" placeholder="e.g. 'Let me talk to my co-founder this week'">
+    </div>
+  </div>
+
+  <!-- Step 4: Zoom AI Summary -->
+  <div class="card">
+    <div class="card-label">Step 4 — Zoom AI Summary (Paste Here)</div>
+    <p style="font-size:.8rem;color:var(--text-mid);margin-bottom:14px;line-height:1.6">
+      After your Zoom call ends, click <strong>AI Summary</strong> in the Zoom app → copy the summary → paste below. No transcript needed — the AI summary is enough.
+    </p>
+    <div class="zoom-area">
+      <textarea id="zoomSummary" placeholder="Paste your Zoom AI summary here…
+
+Example:
+'The meeting covered the company's current sales challenges including inconsistent pipeline management and lack of CRM adoption. The prospect expressed interest in automation solutions and mentioned their team of 8 reps struggling with manual reporting. Key pain point: founder still closing 60% of deals. Budget discussion was positive...'"></textarea>
+    </div>
+    <div class="zoom-hint">
+      💡 Zoom AI Summary: After call → click <strong>Summary</strong> tab in Zoom → Copy All → Paste above
+    </div>
+    <p style="font-size:.74rem;color:var(--text-light);margin-top:8px;font-style:italic">
+      No Zoom AI? Type 3-4 sentences summarizing what was discussed. That's enough.
+    </p>
+  </div>
+
+  <!-- Generate -->
+  <div class="gen-zone">
+    <button class="btn-generate" id="genBtn" onclick="generateFollowUp()">
+      ⚡ Generate Follow-Up Email →
+    </button>
+  </div>
+
+  <!-- Loading -->
+  <div class="loading" id="loading">
+    <div class="l-spinner"></div>
+    <div class="l-steps">
+      <div class="l-step on" id="ls1">📋 Reading session notes</div>
+      <div class="l-step" id="ls2">🔍 Analyzing audit data + answers</div>
+      <div class="l-step" id="ls3">✍️ Drafting personalized follow-up</div>
+      <div class="l-step" id="ls4">💰 Adding retainer bridge language</div>
+    </div>
+  </div>
+
+  <!-- Email output -->
+  <div class="email-output" id="emailOutput">
+
+    <div class="stripe-reminder">
+      <h4>💳 Retainer Payment Link Ready</h4>
+      <p>After sending the email, follow up with the Stripe link if they're hot:<br>
+      <a href="https://chuck-dot-bit.github.io/StephensServices" target="_blank">chuck-dot-bit.github.io/StephensServices</a>
+      </p>
+    </div>
+
+    <div class="email-card">
+      <div class="email-header">
+        <span>Follow-Up Email — Review Before Sending</span>
+        <strong id="emailTo"></strong>
+      </div>
+      <div class="email-subject">
+        <label>Subject</label>
+        <input type="text" id="emailSubject" value="">
+      </div>
+      <div class="email-body">
+        <textarea id="emailBody"></textarea>
+      </div>
+    </div>
+
+    <div class="action-row">
+      <button class="btn-action btn-copy" onclick="copyEmail()">📋 Copy Email</button>
+      <button class="btn-action btn-gmail" onclick="openGmail()">✉️ Open in Gmail</button>
+    </div>
+
+    <button class="new-session-btn" onclick="resetForm()">+ Start New Session Debrief</button>
+
+  </div>
+
+</div>
+
+<script>
+const GEMINI_KEY  = "AIzaSyDtt6X98PJ_MUr6wkf-o6NtPqvvo8JbgEQ";
+const SERVICES    = "https://chuck-dot-bit.github.io/StephensServices";
+const STRIPE_LINK = "https://buy.stripe.com/28E8wQfdC6490ZdgWz00000";
+
+// ── PROSPECT LOOKUP ──
+// In a real deployment this would query your Formspree submissions or a simple backend.
+// For now we use localStorage to store audit data if the audit and debrief are on same device,
+// and fall back to manual entry.
+function lookupProspect(){
+  const email = document.getElementById('prospectEmail').value.trim().toLowerCase();
+  if(!email){ alert('Enter the prospect email to look up.'); return; }
+
+  // Try localStorage first (audit tool saves data there if on same device)
+  const stored = localStorage.getItem('rea_' + email);
+  if(stored){
+    const d = JSON.parse(stored);
+    window._prospect = d;
+    document.getElementById('pfName').textContent = `${d.fn} ${d.ln} — ${d.co}`;
+    document.getElementById('pfMeta').textContent = `${d.ind} · Team: ${d.ts} · Score: ${d.score}/165 · Tier: ${d.tier} · Leakage: $${parseInt(d.leakage).toLocaleString()}`;
+    document.getElementById('prospectFound').classList.add('on');
+    document.getElementById('manualEntry').style.display = 'none';
+    document.getElementById('manualToggle').style.display = 'none';
+  } else {
+    // Not found — prompt manual entry
+    document.getElementById('manualEntry').style.display = 'block';
+    window._prospect = { fn:'', ln:'', co:'', ind:'', ts:'', score:0, tier:'Unknown', leakage:0, gaps:'', cats:'', qAnswers:'' };
+    alert('Audit data not found for that email. Please fill in manually below — or ensure the audit and debrief are used on the same device.');
+  }
+}
+
+function toggleManual(){
+  const me = document.getElementById('manualEntry');
+  const mt = document.getElementById('manualToggle');
+  const showing = me.style.display !== 'none';
+  me.style.display = showing ? 'none' : 'block';
+  mt.textContent = showing ? 'Enter manually instead' : 'Hide manual entry';
+  if(!showing) window._prospect = { fn:'', ln:'', co:'', ind:'', ts:'', score:0, tier:'Unknown', leakage:0, gaps:'', cats:'', qAnswers:'' };
+}
+
+let selectedSentiment = '';
+function setSent(btn, val){
+  document.querySelectorAll('.sent-btn').forEach(b=>{ b.className='sent-btn'; });
+  btn.classList.add('sel-'+val);
+  selectedSentiment = val;
+  document.getElementById('sentiment').value = val;
+}
+
+// ── GENERATE FOLLOW-UP ──
+async function generateFollowUp(){
+  // Gather prospect data
+  const p = window._prospect || {};
+  const fn = p.fn || document.getElementById('mFn')?.value || 'Prospect';
+  const ln = p.ln || document.getElementById('mLn')?.value || '';
+  const co = p.co || document.getElementById('mCo')?.value || 'their company';
+  const ind = p.ind || document.getElementById('mInd')?.value || 'their industry';
+  const email = document.getElementById('prospectEmail').value.trim();
+
+  const sentiment   = selectedSentiment || document.getElementById('sentiment').value || 'warm';
+  const objection   = document.getElementById('objection').value;
+  const problem     = document.getElementById('problem').value;
+  const resonated   = document.getElementById('resonated').value;
+  const priority    = document.getElementById('priority').value;
+  const commitment  = document.getElementById('commitment').value;
+  const zoomSummary = document.getElementById('zoomSummary').value;
+
+  if(!zoomSummary && !problem){
+    alert('Please paste the Zoom AI summary or describe what was discussed — Gemini needs this to personalize the email.');
+    return;
+  }
+  if(GEMINI_KEY === "AIzaSyDtt6X98PJ_MUr6wkf-o6NtPqvvo8JbgEQ"){
+    alert('Add your Gemini API key to the GEMINI_KEY variable.');
+    return;
+  }
+
+  // Show loading
+  document.getElementById('genBtn').disabled = true;
+  document.getElementById('loading').classList.add('on');
+  document.getElementById('emailOutput').classList.remove('on');
+  const steps = ['ls1','ls2','ls3','ls4'];
+  let si = 0;
+  const iv = setInterval(()=>{
+    if(si>0) document.getElementById(steps[si-1]).classList.remove('on');
+    if(si<steps.length){ document.getElementById(steps[si]).classList.add('on'); si++; }
+  }, 1800);
+
+  // Objection handling language
+  const objectionMap = {
+    budget:    "Address the budget concern directly — frame the $1,103 net investment (after $497 credit) as a fraction of their estimated leakage. Use ROI language.",
+    timing:    "Acknowledge timing but create gentle urgency — Stephen has one opening this month and the revenue leakage doesn't pause while they decide.",
+    authority:  "Make it easy for them to share — offer to send a one-page summary they can share with their partner or board.",
+    trust:     "Offer a reference from a similar company or industry. Remind them the $497 session fee was a no-risk way to evaluate fit.",
+    scope:     "Clarify the deliverables clearly in the email — exactly what's included in the 36 hours.",
+    diy:       "Acknowledge their capability but reframe — the question isn't whether they can do it, it's whether the revenue they lose while they figure it out is worth it.",
+    other:     "Address any concerns raised in the session with empathy and confidence.",
+    "":        "No major objection — keep the email confirmatory and momentum-building."
+  };
+
+  const prompt = `You are Stephen Samchuck, a Fractional Sales Operations expert. Write a personalized follow-up email after a paid strategy session.
+
+PROSPECT: ${fn} ${ln} at ${co} | Industry: ${ind}
+AUDIT SCORE: ${p.score||'unknown'}/165 | TIER: ${p.tier||'unknown'} | LEAKAGE: $${parseInt(p.leakage||0).toLocaleString()}
+TOP GAPS: ${p.gaps||'not specified'}
+PRE-SESSION ANSWERS: ${p.qAnswers||'not available'}
+
+SESSION DATA:
+Prospect temperature: ${sentiment}
+Primary objection: ${objection||'none'}
+Their #1 stated problem (in their words): "${problem}"
+What resonated most: "${resonated}"
+Agreed #1 priority fix: "${priority}"
+Commitment/next step mentioned: "${commitment}"
+
+ZOOM SESSION SUMMARY:
+${zoomSummary}
+
+RETAINER OFFER: $1,600 USD/month · 36 hrs · 16 hrs live · 20 hrs implemented deliverables
+SESSION CREDIT: $497 session fee credited toward first month. Net new investment: $1,103 to start.
+PAYMENT: ${STRIPE_LINK}
+SERVICES PAGE: ${SERVICES}
+
+OBJECTION HANDLING INSTRUCTION: ${objectionMap[objection]||objectionMap[""]}
+
+WRITE THE EMAIL:
+- Subject line: personalized, specific, not generic
+- Opening: reference something SPECIFIC they said in the session (use their exact words from the problem statement or Zoom summary)
+- Paragraph 2: reflect back what you heard as their core challenge — show you listened
+- Paragraph 3: the implementation roadmap — 3 bullet points for what Month 1 looks like specifically for them based on their #1 priority fix
+- Paragraph 4: the offer — $1,600/month, $497 credited (they net $1,103 to start), what's included, the Stripe link
+- Closing: warm, direct, one soft question CTA — not pushy
+- Signature: Stephen Samchuck | Fractional Sales Operations | ${SERVICES}
+
+Tone: warm, expert, direct. Like a trusted advisor summarizing a great conversation and making the next step obvious. Do NOT use generic sales language. Use their words back to them where possible.
+
+Respond with ONLY:
+SUBJECT: [subject line]
+---
+[email body]`;
+
+  try{
+    const resp = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_KEY}`,
+      { method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({
+          contents:[{parts:[{text:prompt}]}],
+          generationConfig:{temperature:.72, maxOutputTokens:800}
+        })
+      }
+    );
+    const data = await resp.json();
+    clearInterval(iv);
+    document.getElementById('loading').classList.remove('on');
+    document.getElementById('genBtn').disabled = false;
+
+    const text = data.candidates[0].content.parts[0].text.trim();
+    const subjectMatch = text.match(/^SUBJECT:\s*(.+)/m);
+    const subject = subjectMatch ? subjectMatch[1].trim() : `Following up — ${co} Revenue Strategy Session`;
+    const body = text.replace(/^SUBJECT:.+\n?-*\n?/,'').trim();
+
+    // Render email
+    document.getElementById('emailTo').textContent = email || fn + ' ' + ln;
+    document.getElementById('emailSubject').value = subject;
+    document.getElementById('emailBody').value = body;
+    document.getElementById('emailOutput').classList.add('on');
+    document.getElementById('emailOutput').scrollIntoView({behavior:'smooth'});
+
+    // Store for copy/gmail
+    window._emailData = { to: email, subject, body };
+
+  } catch(e){
+    clearInterval(iv);
+    document.getElementById('loading').classList.remove('on');
+    document.getElementById('genBtn').disabled = false;
+    console.error(e);
+    alert('Error generating email: ' + e.message);
+  }
+}
+
+function copyEmail(){
+  const d = window._emailData;
+  if(!d) return;
+  const full = `To: ${d.to}\nSubject: ${d.subject}\n\n${d.body}`;
+  navigator.clipboard.writeText(full).then(()=>{
+    const btn = document.querySelector('.btn-copy');
+    btn.textContent = '✅ Copied!';
+    setTimeout(()=>{ btn.textContent = '📋 Copy Email'; }, 2500);
+  });
+}
+
+function openGmail(){
+  const d = window._emailData;
+  if(!d) return;
+  const url = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(d.to)}&su=${encodeURIComponent(d.subject)}&body=${encodeURIComponent(d.body)}`;
+  window.open(url, '_blank');
+}
+
+function resetForm(){
+  document.getElementById('prospectEmail').value = '';
+  document.getElementById('prospectFound').classList.remove('on');
+  document.getElementById('problem').value = '';
+  document.getElementById('resonated').value = '';
+  document.getElementById('priority').value = '';
+  document.getElementById('commitment').value = '';
+  document.getElementById('zoomSummary').value = '';
+  document.querySelectorAll('.sent-btn').forEach(b=>b.className='sent-btn');
+  document.getElementById('sentiment').value = '';
+  document.getElementById('objection').value = '';
+  document.getElementById('emailOutput').classList.remove('on');
+  selectedSentiment = '';
+  window._prospect = null;
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// ── Save prospect data to localStorage from audit (inject this into audit tool) ──
+// The audit tool calls: saveProspectToStorage(prospectData)
+// so the debrief can look it up by email
+function saveProspectToStorage(d){
+  try{
+    localStorage.setItem('rea_'+d.em.toLowerCase(), JSON.stringify({
+      fn:d.fn, ln:d.ln, co:d.co, ind:d.ind, ts:d.ts, em:d.em,
+      score:d.score, tier:d.tier, leakage:d.leakage,
+      gaps:d.gaps, cats:d.cats, qAnswers:d.qAnswers||''
+    }));
+  } catch(e){ console.log('Storage save failed:', e); }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,971 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Revenue Engine Audit™ | Find Your Revenue Leaks in 8 Minutes</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+  :root {
+    --navy:        #0c2340;
+    --navy-mid:    #163554;
+    --blue:        #1a5276;
+    --gold:        #c8973a;
+    --gold-light:  #f0c060;
+    --red:         #c0392b;
+    --red-light:   #fdecea;
+    --amber:       #d35400;
+    --amber-light: #fff0e6;
+    --yellow:      #d4a017;
+    --yellow-light:#fffbe6;
+    --green:       #1a6b4a;
+    --green-light: #e8f7f0;
+    --cream:       #f8f6f2;
+    --white:       #ffffff;
+    --text:        #1a1a2e;
+    --text-mid:    #3d4a5c;
+    --text-light:  #6b7a8d;
+    --border:      #dde4ed;
+    --shadow:      0 4px 24px rgba(12,35,64,.09);
+    --shadow-lg:   0 12px 48px rgba(12,35,64,.16);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Inter',sans-serif;background:var(--cream);color:var(--text);line-height:1.6}
+
+  /* ── TOP BAR ── */
+  .topbar{background:var(--navy);color:#fff;padding:12px 40px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 2px 16px rgba(0,0,0,.35)}
+  .topbar-brand{font-family:'Playfair Display',serif;font-size:1rem;color:#fff;display:flex;align-items:center;gap:10px}
+  .topbar-brand span{font-family:'Inter',sans-serif;font-size:.7rem;font-weight:600;color:rgba(255,255,255,.45);letter-spacing:.1em;text-transform:uppercase}
+  .progress-wrap{display:flex;align-items:center;gap:10px;font-size:.78rem;color:rgba(255,255,255,.65)}
+  .pbar{width:140px;height:4px;background:rgba(255,255,255,.15);border-radius:2px;overflow:hidden}
+  .pbar-fill{height:100%;background:var(--gold);border-radius:2px;transition:width .4s ease;width:0}
+
+  /* ── HERO ── */
+  .hero{background:linear-gradient(140deg,var(--navy) 0%,#1a3a5c 55%,#1a4a6a 100%);color:#fff;padding:76px 40px 68px;text-align:center;position:relative;overflow:hidden}
+  .hero::before{content:'';position:absolute;top:-30%;right:-8%;width:480px;height:480px;background:radial-gradient(circle,rgba(200,151,58,.13) 0%,transparent 70%);pointer-events:none}
+  .hero::after{content:'';position:absolute;bottom:-20%;left:-5%;width:320px;height:320px;background:radial-gradient(circle,rgba(26,90,118,.25) 0%,transparent 70%);pointer-events:none}
+  .hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(200,151,58,.15);border:1px solid rgba(200,151,58,.35);color:var(--gold-light);padding:6px 18px;border-radius:20px;font-size:.73rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:24px}
+  .hero h1{font-family:'Playfair Display',serif;font-size:clamp(2rem,5vw,3.4rem);line-height:1.13;margin-bottom:18px;color:#fff}
+  .hero h1 em{color:var(--gold-light);font-style:italic}
+  .hero-sub{font-size:1.05rem;color:rgba(255,255,255,.7);max-width:580px;margin:0 auto 36px;font-weight:300;line-height:1.8}
+  .hero-stats{display:flex;gap:36px;justify-content:center;flex-wrap:wrap}
+  .hs{text-align:center}
+  .hs-num{font-family:'Playfair Display',serif;font-size:2rem;color:var(--gold-light);line-height:1}
+  .hs-label{font-size:.72rem;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.06em;margin-top:4px}
+
+  /* ── FORM WRAPPER ── */
+  .fw{max-width:800px;margin:0 auto;padding:44px 20px 80px}
+
+  /* ── CARDS ── */
+  .card{background:#fff;border:1px solid var(--border);border-radius:16px;padding:32px 34px;margin-bottom:24px;box-shadow:var(--shadow)}
+  .card-label{font-size:.7rem;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--gold);margin-bottom:16px}
+  .card h3{font-family:'Playfair Display',serif;font-size:1.2rem;color:var(--navy);margin-bottom:16px}
+
+  /* ── CONTACT FIELDS ── */
+  .frow{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+  .frow.t3{grid-template-columns:1fr 1fr 1fr}
+  .fg{display:flex;flex-direction:column;gap:5px}
+  .fg label{font-size:.72rem;font-weight:600;color:var(--text-mid);letter-spacing:.04em;text-transform:uppercase}
+  .fg input,.fg select{border:1.5px solid var(--border);border-radius:8px;padding:10px 13px;font-family:'Inter',sans-serif;font-size:.88rem;color:var(--text);background:var(--cream);outline:none;transition:border-color .2s,box-shadow .2s}
+  .fg input:focus,.fg select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(26,82,118,.1);background:#fff}
+
+  /* ── CATEGORY ── */
+  .cat-section{background:#fff;border:1px solid var(--border);border-radius:16px;margin-bottom:20px;box-shadow:var(--shadow);overflow:hidden;transition:box-shadow .2s}
+  .cat-section:hover{box-shadow:var(--shadow-lg)}
+  .cat-header{background:linear-gradient(90deg,var(--navy) 0%,var(--navy-mid) 100%);padding:18px 26px;display:flex;align-items:center;gap:13px;cursor:pointer;user-select:none}
+  .cat-icon{font-size:1.3rem;flex-shrink:0}
+  .cat-title-wrap{flex:1}
+  .cat-title{font-size:.95rem;font-weight:700;color:#fff;margin-bottom:2px}
+  .cat-sub{font-size:.75rem;color:rgba(255,255,255,.55)}
+  .cat-badge{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);color:#fff;border-radius:20px;padding:3px 13px;font-size:.75rem;font-weight:600;min-width:60px;text-align:center;transition:background .3s}
+  .cat-badge.done{background:var(--gold);border-color:var(--gold)}
+  .cat-chevron{color:rgba(255,255,255,.45);font-size:.85rem;transition:transform .3s;margin-left:6px}
+  .cat-section.open .cat-chevron{transform:rotate(180deg)}
+  .cat-body{padding:26px;display:none}
+  .cat-section.open .cat-body{display:block}
+
+  /* ── QUESTION ── */
+  .q-item{margin-bottom:26px;padding-bottom:26px;border-bottom:1px solid var(--border)}
+  .q-item:last-child{margin-bottom:0;padding-bottom:0;border-bottom:none}
+  .q-label{font-size:.91rem;font-weight:600;color:var(--text);margin-bottom:5px;line-height:1.45}
+  .q-hint{font-size:.76rem;color:var(--text-light);margin-bottom:13px;font-style:italic}
+  .q-num{display:inline-block;background:var(--navy);color:#fff;border-radius:4px;padding:1px 7px;font-size:.66rem;font-weight:700;margin-right:6px;letter-spacing:.02em;vertical-align:middle}
+
+  /* ── 1-5 RATING ── */
+  .rating{display:flex;gap:10px;align-items:stretch}
+  .r-btn{flex:1;border:2px solid var(--border);border-radius:10px;background:var(--cream);cursor:pointer;padding:10px 6px;display:flex;flex-direction:column;align-items:center;gap:4px;transition:all .15s;font-family:'Inter',sans-serif}
+  .r-btn:hover{border-color:var(--blue);background:#eef4fb}
+  .r-num{font-size:1.3rem;font-weight:700;color:var(--text-mid)}
+  .r-label{font-size:.62rem;color:var(--text-light);text-align:center;line-height:1.3}
+
+  .r-btn.sel-1{background:#fdecea;border-color:#c0392b}.r-btn.sel-1 .r-num{color:#c0392b}.r-btn.sel-1 .r-label{color:#c0392b}
+  .r-btn.sel-2{background:#fff0e6;border-color:#d35400}.r-btn.sel-2 .r-num{color:#d35400}.r-btn.sel-2 .r-label{color:#d35400}
+  .r-btn.sel-3{background:#fffbe6;border-color:#d4a017}.r-btn.sel-3 .r-num{color:#b08010}.r-btn.sel-3 .r-label{color:#b08010}
+  .r-btn.sel-4{background:#eef8f4;border-color:#2a9060}.r-btn.sel-4 .r-num{color:#1a6b4a}.r-btn.sel-4 .r-label{color:#1a6b4a}
+  .r-btn.sel-5{background:#e8f7f0;border-color:#1a6b4a}.r-btn.sel-5 .r-num{color:#1a6b4a}.r-btn.sel-5 .r-label{color:#1a6b4a}
+
+  /* ── SUBMIT ── */
+  .submit-zone{background:#fff;border:1px solid var(--border);border-radius:16px;padding:40px 34px;margin-top:28px;box-shadow:var(--shadow);text-align:center}
+  .submit-zone h3{font-family:'Playfair Display',serif;font-size:1.55rem;color:var(--navy);margin-bottom:10px}
+  .submit-zone p{font-size:.88rem;color:var(--text-mid);margin-bottom:26px;max-width:480px;margin-left:auto;margin-right:auto}
+  .btn-gen{background:var(--navy);color:#fff;border:none;border-radius:12px;padding:17px 44px;font-family:'Inter',sans-serif;font-size:.98rem;font-weight:700;cursor:pointer;transition:background .2s,transform .15s,box-shadow .2s;letter-spacing:.02em;box-shadow:0 4px 20px rgba(12,35,64,.25)}
+  .btn-gen:hover{background:#081828;transform:translateY(-2px);box-shadow:0 8px 32px rgba(12,35,64,.3)}
+  .btn-gen:disabled{opacity:.6;cursor:not-allowed;transform:none}
+  .submit-note{font-size:.72rem;color:var(--text-light);margin-top:12px;font-style:italic}
+
+  /* ── LOADING ── */
+  .loading{display:none;position:fixed;inset:0;background:rgba(12,35,64,.88);z-index:999;flex-direction:column;align-items:center;justify-content:center;color:#fff;text-align:center;padding:40px}
+  .loading.on{display:flex}
+  .spinner{width:52px;height:52px;border:4px solid rgba(255,255,255,.18);border-top-color:var(--gold-light);border-radius:50%;animation:spin 1s linear infinite;margin-bottom:22px}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .loading h2{font-family:'Playfair Display',serif;font-size:1.55rem;margin-bottom:10px}
+  .l-steps{font-size:.86rem;color:rgba(255,255,255,.6);line-height:2.2}
+  .l-step{opacity:.35;transition:opacity .3s}
+  .l-step.on{opacity:1;color:var(--gold-light)}
+
+  /* ── REPORT ── */
+  .report{display:none;max-width:800px;margin:0 auto;padding:44px 20px 80px}
+  .report.on{display:block}
+
+  .r-hero{background:linear-gradient(135deg,var(--navy) 0%,#1a3a5c 100%);border-radius:16px;padding:40px;color:#fff;margin-bottom:22px;position:relative;overflow:hidden}
+  .r-hero::after{content:'';position:absolute;bottom:-30px;right:-30px;width:180px;height:180px;background:radial-gradient(circle,rgba(200,151,58,.18) 0%,transparent 70%)}
+  .r-eyebrow{font-size:.7rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--gold-light);margin-bottom:10px}
+  .r-hero h2{font-family:'Playfair Display',serif;font-size:1.8rem;margin-bottom:6px}
+  .r-meta{font-size:.8rem;color:rgba(255,255,255,.55);margin-bottom:26px}
+
+  /* Revenue leakage number */
+  .leakage-banner{background:rgba(192,57,43,.18);border:1px solid rgba(192,57,43,.4);border-radius:12px;padding:16px 24px;margin-bottom:22px;display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+  .leakage-num{font-family:'Playfair Display',serif;font-size:2.4rem;color:#ff6b5b;line-height:1}
+  .leakage-label{font-size:.78rem;color:rgba(255,255,255,.65);text-transform:uppercase;letter-spacing:.06em;margin-top:3px}
+  .leakage-desc{font-size:.85rem;color:rgba(255,255,255,.7);line-height:1.6;flex:1}
+
+  .gauges{display:flex;gap:16px;flex-wrap:wrap;margin-top:4px}
+  .gauge{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);border-radius:10px;padding:14px 20px;text-align:center;min-width:110px}
+  .g-num{font-family:'Playfair Display',serif;font-size:2rem;color:var(--gold-light);line-height:1}
+  .g-label{font-size:.68rem;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.05em;margin-top:3px}
+  .g-grade{font-size:.9rem;font-weight:700;margin-top:5px}
+
+  /* Tier badge */
+  .tier-badge{display:inline-block;padding:8px 22px;border-radius:24px;font-size:.85rem;font-weight:700;letter-spacing:.04em;margin-bottom:18px}
+  .tier-leakage{background:rgba(192,57,43,.25);color:#ff8878;border:1px solid rgba(192,57,43,.4)}
+  .tier-bottleneck{background:rgba(211,84,0,.25);color:#ff9955;border:1px solid rgba(211,84,0,.4)}
+  .tier-scaling{background:rgba(212,160,23,.2);color:#f0c060;border:1px solid rgba(212,160,23,.35)}
+  .tier-optimized{background:rgba(26,107,74,.25);color:#5dd4a0;border:1px solid rgba(26,107,74,.4)}
+
+  /* Category bars */
+  .rcard{background:#fff;border:1px solid var(--border);border-radius:16px;padding:30px 34px;margin-bottom:20px;box-shadow:var(--shadow)}
+  .rcard-label{font-size:.7rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:14px}
+  .csb-row{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+  .csb-name{font-size:.8rem;font-weight:500;color:var(--text-mid);width:210px;flex-shrink:0}
+  .csb-bar{flex:1;height:10px;background:var(--border);border-radius:5px;overflow:hidden}
+  .csb-fill{height:100%;border-radius:5px;transition:width .7s ease}
+  .csb-score{font-size:.78rem;font-weight:700;width:36px;text-align:right}
+
+  /* Recommendation blocks */
+  .rec-block{border-radius:12px;padding:20px 22px;margin:16px 0;border-left:4px solid}
+  .rec-critical{background:var(--red-light);border-color:var(--red)}
+  .rec-warning{background:var(--amber-light);border-color:var(--amber)}
+  .rec-good{background:var(--green-light);border-color:var(--green)}
+  .rec-tag{font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px}
+  .rec-title{font-size:.93rem;font-weight:700;color:var(--text);margin-bottom:6px}
+  .rec-stat{font-size:.84rem;color:var(--text-mid);margin-bottom:8px;line-height:1.55}
+  .rec-action{font-size:.82rem;font-weight:600;color:var(--blue)}
+
+  /* AI narrative */
+  #aiNarrative{font-size:.91rem;color:var(--text-mid);line-height:1.78}
+  #aiNarrative h2{font-family:'Playfair Display',serif;font-size:1.25rem;color:var(--navy);margin:26px 0 10px;padding-top:20px;border-top:1px solid var(--border)}
+  #aiNarrative h2:first-child{border-top:none;margin-top:0;padding-top:0}
+  #aiNarrative h3{font-size:.95rem;font-weight:700;color:var(--navy-mid);margin:16px 0 7px}
+  #aiNarrative ul{padding-left:18px;margin:8px 0 14px}
+  #aiNarrative li{margin-bottom:5px}
+  #aiNarrative strong{color:var(--text)}
+
+  /* CTA */
+  .r-cta{background:linear-gradient(135deg,var(--navy) 0%,#1a3a5c 100%);border-radius:16px;padding:44px 40px;text-align:center;color:#fff;margin-top:22px}
+  .r-cta h3{font-family:'Playfair Display',serif;font-size:1.6rem;margin-bottom:10px}
+  .r-cta p{font-size:.88rem;color:rgba(255,255,255,.7);margin-bottom:28px;max-width:480px;margin-left:auto;margin-right:auto;line-height:1.7}
+  .btn{display:inline-block;border:none;border-radius:10px;padding:15px 36px;font-family:'Inter',sans-serif;font-size:.92rem;font-weight:700;cursor:pointer;transition:background .2s,transform .15s;letter-spacing:.02em;margin:6px;text-decoration:none}
+  .btn-gold{background:var(--gold);color:#fff}
+  .btn-gold:hover{background:#b07828;transform:translateY(-1px)}
+  .btn-outline{background:transparent;border:2px solid rgba(255,255,255,.28);color:#fff}
+  .btn-outline:hover{background:rgba(255,255,255,.1)}
+
+  @media(max-width:620px){
+    .topbar{padding:12px 16px}
+    .hero{padding:52px 18px 44px}
+    .fw,.report{padding-left:14px;padding-right:14px}
+    .frow,.frow.t3{grid-template-columns:1fr}
+    .rating{gap:6px}
+    .r-btn{padding:8px 4px}
+    .r-num{font-size:1.1rem}
+    .card,.rcard,.cat-body{padding:20px 18px}
+    .gauges{gap:10px}
+  }
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="topbar-brand">Revenue Engine Audit™ <span>by Stephen Samchuck</span></div>
+  <div class="progress-wrap">
+    <span id="pLabel">0 / 33</span>
+    <div class="pbar"><div class="pbar-fill" id="pFill"></div></div>
+  </div>
+</div>
+
+<!-- LOADING -->
+<div class="loading" id="loading">
+  <div class="spinner"></div>
+  <h2>Calculating Your Revenue Gaps…</h2>
+  <div class="l-steps">
+    <div class="l-step on" id="ls1">🔢 Scoring 33 revenue practices</div>
+    <div class="l-step" id="ls2">💸 Estimating revenue leakage</div>
+    <div class="l-step" id="ls3">📋 Building recommendation blocks</div>
+    <div class="l-step" id="ls4">🤖 Generating your AI narrative</div>
+    <div class="l-step" id="ls5">📄 Preparing your PDF report</div>
+  </div>
+</div>
+
+<!-- ════════════ AUDIT FORM ════════════ -->
+<div id="auditForm">
+  <div class="hero">
+    <div class="hero-badge">⚡ $2,500 Value — Complimentary</div>
+    <h1>Find the <em>Revenue Leaks</em><br>in Your Sales System<br>in 8 Minutes</h1>
+    <p class="hero-sub">Answer 33 questions. Get a personalized report showing exactly where your business is losing revenue — and what to do about it first.</p>
+    <div class="hero-stats">
+      <div class="hs"><div class="hs-num">33</div><div class="hs-label">Diagnostics</div></div>
+      <div class="hs"><div class="hs-num">8</div><div class="hs-label">Revenue Areas</div></div>
+      <div class="hs"><div class="hs-num">~8</div><div class="hs-label">Minutes</div></div>
+      <div class="hs"><div class="hs-num">$2,500</div><div class="hs-label">Value. Free.</div></div>
+    </div>
+  </div>
+
+  <div class="fw">
+    <!-- CONTACT -->
+    <div class="card">
+      <div class="card-label">About You</div>
+      <div class="frow">
+        <div class="fg"><label>First Name *</label><input id="fn" placeholder="Jane" required></div>
+        <div class="fg"><label>Last Name *</label><input id="ln" placeholder="Smith" required></div>
+      </div>
+      <div class="frow">
+        <div class="fg"><label>Company *</label><input id="co" placeholder="Acme Corp" required></div>
+        <div class="fg"><label>Your Role</label><input id="ro" placeholder="CEO / Founder / VP Sales"></div>
+      </div>
+      <div class="frow t3">
+        <div class="fg"><label>Email *</label><input type="email" id="em" placeholder="you@company.com" required></div>
+        <div class="fg"><label>Industry</label>
+          <select id="ind">
+            <option value="">Select…</option>
+            <option>B2B SaaS / Technology</option>
+            <option>Manufacturing / Industrial</option>
+            <option>HVAC / Mechanical</option>
+            <option>Professional Services</option>
+            <option>Healthcare / MedTech</option>
+            <option>Distribution / Wholesale</option>
+            <option>Construction / Trades</option>
+            <option>Financial Services</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="fg"><label>Sales Team Size</label>
+          <select id="ts">
+            <option value="">Select…</option>
+            <option>1 (founder-led)</option>
+            <option>2–5</option>
+            <option>6–15</option>
+            <option>16–50</option>
+            <option>50+</option>
+          </select>
+        </div>
+      </div>
+      <div class="frow">
+        <div class="fg"><label>Estimated Annual Revenue</label>
+          <select id="rev">
+            <option value="">Select…</option>
+            <option value="500000">Under $500K</option>
+            <option value="1000000">$500K – $1M</option>
+            <option value="2500000">$1M – $5M</option>
+            <option value="7500000">$5M – $10M</option>
+            <option value="15000000">$10M – $25M</option>
+            <option value="30000000">$25M+</option>
+          </select>
+        </div>
+        <div class="fg"><label>Biggest Sales Challenge Right Now</label>
+          <select id="chal">
+            <option value="">Select…</option>
+            <option>Not enough leads</option>
+            <option>Leads don't convert</option>
+            <option>Long / unpredictable sales cycle</option>
+            <option>Team performance inconsistent</option>
+            <option>No visibility into pipeline</option>
+            <option>Losing deals to competitors</option>
+            <option>Founder still closing all deals</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div id="qContainer"></div>
+
+    <div class="submit-zone">
+      <h3>Ready to See Your Revenue Leaks?</h3>
+      <p>Your answers are scored against 33 revenue best practices. You'll receive an estimated dollar value of revenue leakage and a prioritized action plan — instantly.</p>
+      <button class="btn-gen" id="genBtn" onclick="generate()">Calculate My Revenue Leakage →</button>
+      <div class="submit-note">Free. No credit card. Your report generates in seconds.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════ REPORT ════════════ -->
+<div class="report" id="report">
+
+  <div class="r-hero">
+    <div class="r-eyebrow">Revenue Engine Audit™ — Confidential Diagnostic Report</div>
+    <h2 id="rTitle">Your Revenue Engine Audit</h2>
+    <div class="r-meta" id="rMeta"></div>
+    <div id="tierBadge"></div>
+    <div class="leakage-banner" id="leakageBanner">
+      <div>
+        <div class="leakage-num" id="leakageNum">$0</div>
+        <div class="leakage-label">Estimated Annual Revenue Leakage</div>
+      </div>
+      <div class="leakage-desc" id="leakageDesc"></div>
+    </div>
+    <div class="gauges" id="gauges"></div>
+  </div>
+
+  <!-- Category bars -->
+  <div class="rcard">
+    <div class="rcard-label">Revenue Area Scores — 1 to 5</div>
+    <div id="catBars"></div>
+  </div>
+
+  <!-- Pre-written recommendation blocks -->
+  <div class="rcard">
+    <div class="rcard-label">Priority Findings & Actions</div>
+    <div id="recBlocks"></div>
+  </div>
+
+  <!-- AI narrative -->
+  <div class="rcard">
+    <div class="rcard-label">Full Analysis — Prepared by Stephen Samchuck</div>
+    <div id="aiNarrative">Generating your personalized analysis…</div>
+  </div>
+
+  <!-- CTA -->
+  <div class="r-cta" id="rCta">
+    <h3>Your Revenue Leaks Are Identified.<br>Now Let's Fix Them.</h3>
+    <p id="ctaBody">Book a 30-minute Revenue Strategy Session. We'll walk through your results together and build a 90-day fix plan. Session fee is credited toward your retainer.</p>
+    <a href="https://calendly.com/kssamchuck/30min" class="btn btn-gold" target="_blank" id="calBtn">📅 Book My Strategy Session →</a>
+    <button class="btn btn-outline" onclick="downloadPDF()">⬇ Download PDF Report</button>
+    <div style="margin-top:16px;font-size:.75rem;color:rgba(255,255,255,.45)">Or view the full retainer offer: <a href="https://chuck-dot-bit.github.io/StephensServices" style="color:rgba(255,255,255,.65)" target="_blank">chuck-dot-bit.github.io/StephensServices</a></div>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════
+// CONFIG — replace before deploying
+// ══════════════════════════════════════════
+const GEMINI_KEY = "AIzaSyDtt6X98PJ_MUr6wkf-o6NtPqvvo8JbgEQ";
+const CALENDLY   = "https://calendly.com/kssamchuck/30min"; // replace with your Calendly URL
+const SERVICES   = "https://chuck-dot-bit.github.io/StephensServices";
+
+// ══════════════════════════════════════════
+// AUDIT QUESTIONS — 33 across 8 categories
+// Each question has a pre-written recommendation
+// triggered when score <= 2 (critical) or score == 3 (warning)
+// ══════════════════════════════════════════
+const CATS = [
+  { id:"lg", icon:"🎯", title:"Lead Generation & Prospecting", sub:"How you fill the top of your funnel",
+    qs:[
+      { id:"q1",  text:"We have a clearly defined Ideal Customer Profile (ICP) our team uses consistently.",
+        hint:"Target size, industry, pain points, budget range.",
+        rec:{ title:"Undefined ICP Is Costing You Qualified Pipeline",
+          stat:"Companies with a documented ICP generate 68% more revenue per rep than those without one. Without it, your team pursues the wrong prospects — burning time on deals that will never close.",
+          action:"Build a one-page ICP doc: firmographic criteria, trigger events, budget range, and 3 disqualifying signals. Share it in your CRM as a qualification checklist." }},
+      { id:"q2",  text:"We have reliable, repeatable lead sources that don't depend on one person or referrals.",
+        hint:"Inbound, outbound, partnerships — beyond the founder's network.",
+        rec:{ title:"Founder-Dependent Lead Generation Is a Single Point of Failure",
+          stat:"Businesses that rely on the founder's network for >50% of leads plateau at the same revenue band for an average of 3+ years. The ceiling is the founder's calendar.",
+          action:"Identify 2 non-founder lead channels (content, outbound sequence, channel partners) and build the infrastructure to run them independently." }},
+      { id:"q3",  text:"Our lead volume is sufficient to hit revenue targets at our current close rate.",
+        hint:"Work backwards: target ÷ ACV ÷ close rate = leads needed monthly.",
+        rec:{ title:"Your Pipeline Math Doesn't Add Up",
+          stat:"Most teams discover they need 3–5x more leads than they're currently generating to hit their number. This is a math problem, not a motivation problem.",
+          action:"Calculate your required lead volume: (Monthly Revenue Target ÷ Average Deal Size) ÷ Close Rate = leads needed. Then identify the gap and build to fill it." }},
+      { id:"q4",  text:"We score or qualify leads consistently so reps prioritize the highest-value opportunities.",
+        hint:"Any framework: BANT, MEDDIC, or a simple scoring rubric.",
+        rec:{ title:"Without Lead Scoring, Reps Chase the Wrong Deals",
+          stat:"Sales teams that use formal lead scoring see 77% higher lead-to-close rates and spend 28% less time on unqualified opportunities.",
+          action:"Implement a 5-point lead scoring model in your CRM based on fit (ICP match) and intent (engagement signals). Auto-prioritize high scores." }}
+    ]},
+  { id:"sp", icon:"🔄", title:"Sales Process & Pipeline Health", sub:"Structure and predictability of your revenue cycle",
+    qs:[
+      { id:"q5",  text:"We have a documented sales process with defined stages that all reps follow.",
+        hint:"Written stages with entry criteria — not just what reps do from memory.",
+        rec:{ title:"An Undocumented Process Produces Unpredictable Results",
+          stat:"Organizations with a formal, documented sales process generate 18% more revenue than those without. Every rep improvising their own process means inconsistent results — and no way to fix them.",
+          action:"Map your sales process into 5–7 stages with a one-line entry criterion for each. Configure this in your CRM as the official pipeline view." }},
+      { id:"q6",  text:"Our CRM data is trusted and accurately reflects the real state of every deal.",
+        hint:"Would you stake your quarterly forecast on what's in your CRM right now?",
+        rec:{ title:"An Untrusted CRM Means You're Flying Blind",
+          stat:"67% of sales managers report their CRM data is inaccurate enough to affect forecasting. A CRM that isn't used is worse than no CRM — it creates false confidence.",
+          action:"Run a pipeline audit: review every open deal, purge or update stale entries, and enforce a weekly 'CRM hygiene' rule — no deal advances a stage without an update." }},
+      { id:"q7",  text:"We know our average sales cycle length and use it to forecast accurately.",
+        hint:"Can you predict within 15% what will close this month?",
+        rec:{ title:"Without Cycle Data, Every Forecast Is a Guess",
+          stat:"Companies that track sales cycle velocity forecast revenue within 10% accuracy. Those that don't miss their number by an average of 32% — causing cash flow, hiring, and inventory planning errors.",
+          action:"Pull the last 12 months of closed deals, calculate average cycle by deal size and product line, and use these benchmarks to build a probability-weighted forecast." }},
+      { id:"q8",  text:"Deals rarely go dark — we have a process for re-engaging stalled opportunities.",
+        hint:"Follow-up cadences, breakup emails, multi-threading tactics.",
+        rec:{ title:"Stalled Deals Are Silent Revenue Leaks",
+          stat:"80% of sales require 5+ follow-up touches, yet 44% of reps give up after one. Every deal that goes dark without a formal re-engagement attempt is revenue left on the table.",
+          action:"Create a 4-touch 'deal rescue' sequence for opportunities that haven't moved in 14 days: check-in, value add, urgency trigger, breakup email." }},
+      { id:"q9",  text:"Our pipeline has healthy deal distribution across all stages — not just top-heavy or bottom-heavy.",
+        hint:"Are deals flowing through stages or piling up in one place?",
+        rec:{ title:"A Lopsided Pipeline Hides a Conversion Problem",
+          stat:"Pipelines loaded at the top indicate a closing problem. Pipelines loaded at the bottom indicate a prospecting problem. Both signal process breakdowns that compound over quarters.",
+          action:"Map your deal count and value by stage. Identify the stage with the lowest conversion rate. That is your #1 process fix — build a targeted intervention for that specific transition." }}
+    ]},
+  { id:"ct", icon:"⚙️", title:"CRM & Sales Technology", sub:"The tools running (or slowing) your revenue engine",
+    qs:[
+      { id:"q10", text:"We use a CRM and the team uses it consistently as the single source of truth.",
+        hint:"Pipedrive, HubSpot, Salesforce — doesn't matter which, matters that it's used.",
+        rec:{ title:"No CRM Means No Scalable Sales",
+          stat:"Businesses without a CRM spend an average of 6+ hours per rep per week on administrative tasks that should be automated. That's 300+ hours of selling time lost annually per rep.",
+          action:"Implement Pipedrive or HubSpot this month. Configure your pipeline stages, import your contacts, and make CRM updates a non-negotiable part of the sales workflow." }},
+      { id:"q11", text:"Repetitive manual tasks — data entry, reminders, follow-up emails — are automated.",
+        hint:"Zapier, native CRM automations, email sequences.",
+        rec:{ title:"Manual Work Is the Enemy of Scale",
+          stat:"Sales teams that automate administrative tasks see a 14.5% increase in sales productivity and a 12% reduction in marketing overhead. Manual data entry is your most expensive habit.",
+          action:"Identify your top 3 repetitive tasks and automate each with a Zapier workflow or native CRM automation. Start with: new lead routing, follow-up reminders, and deal stage notifications." }},
+      { id:"q12", text:"Leadership has real-time pipeline and performance visibility — not weekly Excel reports.",
+        hint:"Live dashboards showing revenue, conversion rates, and forecast.",
+        rec:{ title:"Delayed Data Means Delayed Decisions",
+          stat:"Companies using real-time sales dashboards respond to pipeline risk 3x faster than those relying on weekly reports. By the time your spreadsheet is updated, the deal may already be lost.",
+          action:"Build 3 live dashboards in your CRM: Pipeline by Stage (value and count), Weekly Activity by Rep, and Monthly Forecast vs. Target. Review them daily." }},
+      { id:"q13", text:"Our sales tools are integrated — data flows between systems without manual transfer.",
+        hint:"CRM ↔ email ↔ calendar ↔ billing — no copy-paste between tools.",
+        rec:{ title:"Tool Silos Create Data Gaps and Human Error",
+          stat:"The average B2B sales rep switches between 10+ tools daily. Each manual data transfer is a potential error and an average of 2.5 minutes of lost selling time.",
+          action:"Map your current tool stack and identify 3 manual handoffs. Use Zapier or native integrations to automate each one. Priority: CRM-to-email, form-to-CRM, and won-deal-to-billing." }}
+    ]},
+  { id:"te", icon:"🏆", title:"Team Enablement & Performance", sub:"How you build, support, and develop your sales team",
+    qs:[
+      { id:"q14", text:"New reps have a structured onboarding process and can sell independently within 60 days.",
+        hint:"Written playbook, shadowing, milestones — not just 'watch and learn'.",
+        rec:{ title:"Poor Onboarding Extends Your Ramp Time and Kills Confidence",
+          stat:"Companies with a formal onboarding process see 50% higher productivity from new hires and 49% lower turnover. Without structure, new reps spend their first 90 days figuring out what to do instead of doing it.",
+          action:"Build a 30-60-90 day onboarding plan: product knowledge, ICP, sales process, CRM, first call, first demo, first close. Document it once, use it forever." }},
+      { id:"q15", text:"Reps have current sales collateral, battle cards, and objection-handling guides.",
+        hint:"One-pagers, case studies, competitor comparisons — available and used.",
+        rec:{ title:"Unprepared Reps Lose Deals That Should Be Won",
+          stat:"Sales reps spend an average of 43 hours per year searching for or recreating sales materials. 65% of content created by marketing is never used because reps can't find it.",
+          action:"Create a single sales enablement folder (SharePoint or Confluence) with: 3 case studies, 1 competitive battlecard, a top-10 objections guide, and your demo script." }},
+      { id:"q16", text:"Managers conduct regular coaching sessions with structured feedback on deals and skills.",
+        hint:"Weekly or biweekly 1:1s with deal reviews and development conversation.",
+        rec:{ title:"Without Coaching, Reps Plateau and Disengage",
+          stat:"Sales reps who receive weekly coaching see 17% higher quota attainment than those who receive monthly coaching. Coaching frequency is the #1 predictor of rep performance improvement.",
+          action:"Implement weekly 30-minute 1:1s using a simple 3-part agenda: pipeline review (what's at risk), skills focus (one thing to improve), and wins recognition." }},
+      { id:"q17", text:"We track individual rep metrics and use data to coach and develop performance.",
+        hint:"Activity metrics, conversion rates, win/loss — not just quota attainment.",
+        rec:{ title:"What Gets Measured Gets Improved",
+          stat:"Teams using rep-level performance data identify underperformance 60 days earlier than teams relying on quota attainment alone. Early identification means earlier intervention.",
+          action:"Track 5 metrics per rep: # of activities, # of qualified conversations, pipeline created, conversion rate by stage, and win rate. Review monthly and set individual targets." }}
+    ]},
+  { id:"fr", icon:"📊", title:"Forecasting & Revenue Intelligence", sub:"Your ability to predict, measure, and improve revenue",
+    qs:[
+      { id:"q18", text:"Our revenue forecasts are accurate within 15% of actual results most months.",
+        hint:"Consistent, data-based predictions — not optimistic guesses.",
+        rec:{ title:"Inaccurate Forecasting Disrupts Every Business Function",
+          stat:"Sales forecast misses of >20% cause downstream disruption in hiring, inventory, cash flow, and investor confidence. The average company misses its sales forecast by 32% — a number that compounds quarterly.",
+          action:"Move from gut-feel forecasting to a three-scenario model (best case, likely, conservative) based on pipeline stage, deal size, and historical close rates by product." }},
+      { id:"q19", text:"We track and review key KPIs — conversion rates, deal velocity, win rate — regularly.",
+        hint:"At minimum monthly, ideally weekly review of core metrics.",
+        rec:{ title:"You Can't Fix What You Don't Measure",
+          stat:"High-performing sales organizations are 1.5x more likely to base decisions on data analytics than average performers. Reviewing KPIs monthly vs. quarterly alone improves decision speed by 40%.",
+          action:"Establish a monthly revenue review: pipeline coverage ratio, MQL-to-SQL conversion, average deal size trend, win rate by competitor, and sales cycle length. Share with leadership." }},
+      { id:"q20", text:"We conduct win/loss analysis to understand why we win and why we lose.",
+        hint:"Post-deal debrief process with recorded insights.",
+        rec:{ title:"Not Learning From Lost Deals Is the Most Expensive Habit in Sales",
+          stat:"Companies that conduct formal win/loss analysis improve their win rate by an average of 15–20% within 12 months. Every lost deal without a debrief is a paid lesson that goes unlearned.",
+          action:"After every closed/lost deal, record: competitor involved, decision criteria, our weakness, and what we'd do differently. Review aggregated insights quarterly." }},
+      { id:"q21", text:"Revenue reporting is standardized so any stakeholder understands the current state.",
+        hint:"Consistent definitions, shared visibility — no one interprets the numbers differently.",
+        rec:{ title:"Inconsistent Revenue Reporting Creates Organizational Confusion",
+          stat:"In 61% of companies, sales and finance report different revenue numbers for the same period. This misalignment costs an average of 2.5 weeks per quarter in reconciliation time.",
+          action:"Define your revenue metrics glossary: ARR, MRR, bookings, billings, recognized revenue — and share one source of truth with all stakeholders." }}
+    ]},
+  { id:"cf", icon:"🤝", title:"Cross-Functional Alignment", sub:"How sales connects to the rest of your business",
+    qs:[
+      { id:"q22", text:"Sales and marketing agree on the ICP, messaging, and definition of a qualified lead.",
+        hint:"Shared MQL/SQL definition — no finger-pointing between teams.",
+        rec:{ title:"Sales-Marketing Misalignment Is a Revenue Tax",
+          stat:"Companies with strong sales-marketing alignment achieve 20% annual revenue growth. Companies with poor alignment see a 4% revenue decline. The gap is driven almost entirely by unclear handoff definitions.",
+          action:"Run a 90-minute alignment session between sales and marketing. Agree on: ICP definition, MQL criteria, lead handoff SLA, and shared revenue target. Document and sign off." }},
+      { id:"q23", text:"The handoff from sales to operations or delivery is smooth — customers don't notice the transition.",
+        hint:"Documented handoff checklist, clear ownership, no customer confusion.",
+        rec:{ title:"A Poor Sales-to-Delivery Handoff Destroys the Trust You Just Built",
+          stat:"70% of customers who churn cite poor onboarding or implementation experience as the primary reason — not the product itself. The deal doesn't end at the signature.",
+          action:"Create a signed-deal handoff checklist: customer expectations documented, key contacts introduced, kickoff scheduled within 3 business days, success metrics agreed upon." }},
+      { id:"q24", text:"Sales provides product feedback based on prospect conversations, and product listens.",
+        hint:"Structured loop from sales insights to product roadmap.",
+        rec:{ title:"Your Sales Team Is Your Best Product Research Tool — If You're Listening",
+          stat:"Companies with a formal sales-to-product feedback loop launch features with 32% higher adoption rates and reduce churn related to missing features by 24%.",
+          action:"Implement a monthly 'voice of prospect' report from sales to product: top 5 objections, top 3 feature requests, most common reason for loss. Share in a shared Confluence or Notion page." }},
+      { id:"q25", text:"Sales, finance, and legal are aligned on pricing, discounting, and contract approval.",
+        hint:"Clear discount authority, deal desk process, no approval delays.",
+        rec:{ title:"Pricing Confusion Kills Deal Momentum",
+          stat:"Deals requiring unplanned pricing approval take an average of 11 days longer to close than deals within pre-approved parameters. 23% of those deals are lost during the wait.",
+          action:"Define a pricing authority matrix: what a rep can approve, what requires a manager, what requires executive sign-off. Eliminate surprises late in the cycle." }}
+    ]},
+  { id:"cr", icon:"🔁", title:"Customer Retention & Revenue Expansion", sub:"Revenue from your existing customer base",
+    qs:[
+      { id:"q26", text:"New customers have a structured onboarding that delivers value in the first 30 days.",
+        hint:"Day-1 plan, first milestone, check-in cadence — not 'we'll be in touch'.",
+        rec:{ title:"The First 30 Days Determine Whether a Customer Stays or Churns",
+          stat:"Customers who achieve their first 'success milestone' within 30 days are 3x more likely to renew. Companies with structured onboarding reduce early churn by up to 67%.",
+          action:"Define your 'First Value Moment' — the specific thing that makes a customer say 'this was worth it.' Then build a 30-day onboarding plan that reliably delivers it." }},
+      { id:"q27", text:"We manage renewals proactively — customers don't surprise us by not renewing.",
+        hint:"Renewal calendar, health scores, 90-day advance notice system.",
+        rec:{ title:"Reactive Renewal Management Is a Retention Crisis Waiting to Happen",
+          stat:"Companies with proactive renewal processes retain 18% more customers annually than those that wait for renewal conversations until the last month. By then, the decision is usually already made.",
+          action:"Build a renewal calendar with 90/60/30-day trigger points. At 90 days: health check. At 60 days: value review and renewal proposal. At 30 days: signed or escalated." }},
+      { id:"q28", text:"We have a systematic approach to upsell and cross-sell within our existing customer base.",
+        hint:"Expansion playbook, QBRs, defined expansion triggers.",
+        rec:{ title:"Your Existing Customers Are Your Lowest-Cost Revenue Source",
+          stat:"It costs 5–7x more to acquire a new customer than to expand an existing one. Yet most companies invest 90% of their sales resources on new acquisition. Expansion revenue is the highest-margin revenue you have.",
+          action:"Map your product/service expansion matrix. Identify the 20% of customers most likely to expand. Assign each a 90-day expansion play." }},
+      { id:"q29", text:"We measure Net Revenue Retention (NRR) and know if our existing base is growing or shrinking.",
+        hint:"NRR >100% means expansion exceeds churn. A critical metric for any recurring revenue business.",
+        rec:{ title:"Not Knowing Your NRR Means Not Knowing Your Real Growth Rate",
+          stat:"SaaS companies with NRR above 110% grow at nearly double the rate of companies with NRR below 100% — even with the same new logo acquisition rate. NRR is the multiplier on everything else you do.",
+          action:"Calculate NRR now: (Starting MRR + Expansion − Contraction − Churn) ÷ Starting MRR × 100. If you don't have the data, that is the first problem to fix." }}
+    ]},
+  { id:"sl", icon:"🧭", title:"Sales Strategy & Leadership", sub:"Vision, direction, and organizational design",
+    qs:[
+      { id:"q30", text:"We have a documented sales strategy with annual targets broken to monthly and weekly activities.",
+        hint:"Top-down: annual target → monthly quota → weekly activity goals per rep.",
+        rec:{ title:"Hope Is Not a Sales Strategy",
+          stat:"Companies with a written sales plan are 12% more likely to achieve their revenue goals than those operating without one. Breaking annual targets into weekly activities is the single most impactful planning exercise in sales.",
+          action:"Build a one-page sales plan: annual target, monthly milestones, required pipeline coverage, activity benchmarks per rep, and key initiatives by quarter." }},
+      { id:"q31", text:"Territory and account assignments are strategic — coverage is maximized, not based on history.",
+        hint:"Territory design, account tiering, whitespace analysis — not just 'what's always been'.",
+        rec:{ title:"Poor Territory Design Wastes Your Best Reps and Starves Your Weakest Markets",
+          stat:"Companies that redesign sales territories based on market potential see an average of 10–20% revenue increase with no additional headcount. The opportunity is already in your territory — it's just unassigned.",
+          action:"Tier your accounts (A/B/C) by revenue potential. Realign territories to ensure your top reps own your highest-potential accounts. Review annually." }},
+      { id:"q32", text:"We monitor competitive intelligence and adjust our positioning proactively.",
+        hint:"Regular competitive reviews, win/loss by competitor, messaging updates.",
+        rec:{ title:"Competing Blind Means Losing Deals You Should Win",
+          stat:"82% of B2B buyers evaluate competitors before making a decision. Sales reps who can't articulate a clear competitive differentiation lose 35% more competitive deals than those who can.",
+          action:"Build one battlecard per top-3 competitor: their strengths, their weaknesses, how to position against them, and the 3 questions that make your solution the obvious choice." }},
+      { id:"q33", text:"Sales can operate without the founder — we are not founder-led in our day-to-day selling.",
+        hint:"Would revenue hold if the founder was unreachable for 3 months?",
+        rec:{ title:"Founder-Led Sales Is a Growth Ceiling",
+          stat:"Companies that transition out of founder-led sales grow 2.3x faster in the 24 months after the transition. Every month the founder is still the primary seller is a month of scalable growth deferred.",
+          action:"Identify the 3 things only the founder does in the sales process today. For each: document it, train a rep on it, and remove the founder from it within 90 days." }}
+    ]}
+];
+
+// ── SCORING TIERS ──
+const TIERS = [
+  { max:60,  name:"Revenue Leakage",     class:"tier-leakage",    emoji:"🚨", leakPct:.32, desc:"Your sales system has significant structural gaps that are actively bleeding revenue. The good news: these are fixable systems problems, not people problems." },
+  { max:110, name:"Growth Bottlenecks",  class:"tier-bottleneck", emoji:"⚠️", leakPct:.18, desc:"You have solid foundations but critical bottlenecks are capping your growth. Targeted fixes in 2–3 areas could unlock significant revenue." },
+  { max:140, name:"Scaling Constraints", class:"tier-scaling",    emoji:"📈", leakPct:.09, desc:"Your revenue engine is working, but scaling will expose the cracks. Strengthening these areas now prevents costly rebuilds later." },
+  { max:165, name:"Optimized",           class:"tier-optimized",  emoji:"✅", leakPct:.03, desc:"You're operating a high-performance sales system. Focus is on maintaining excellence and finding the next 10% gains." }
+];
+
+// ── STATE ──
+const answers = {};
+let answered = 0;
+
+// ── BUILD UI ──
+function buildUI(){
+  const c = document.getElementById('qContainer');
+  let qn = 1;
+  CATS.forEach((cat,ci)=>{
+    const sec = document.createElement('div');
+    sec.className='cat-section'+(ci===0?' open':'');
+    sec.id='cs-'+cat.id;
+    sec.innerHTML=`
+      <div class="cat-header" onclick="toggleCat('cs-${cat.id}')">
+        <div class="cat-icon">${cat.icon}</div>
+        <div class="cat-title-wrap"><div class="cat-title">${cat.title}</div><div class="cat-sub">${cat.sub}</div></div>
+        <div class="cat-badge" id="badge-${cat.id}">0 / ${cat.qs.length}</div>
+        <div class="cat-chevron">▼</div>
+      </div>
+      <div class="cat-body" id="body-${cat.id}"></div>`;
+    const body=sec.querySelector('#body-'+cat.id);
+    cat.qs.forEach(q=>{
+      const d=document.createElement('div');
+      d.className='q-item';
+      const LABELS=['','Critical','Poor','Developing','Good','Optimized'];
+      const btns=[1,2,3,4,5].map(n=>`
+        <button class="r-btn" id="rb-${q.id}-${n}" onclick="pick('${q.id}',${n},'${cat.id}')">
+          <span class="r-num">${n}</span>
+          <span class="r-label">${LABELS[n]}</span>
+        </button>`).join('');
+      d.innerHTML=`
+        <div class="q-label"><span class="q-num">Q${qn}</span>${q.text}</div>
+        <div class="q-hint">${q.hint}</div>
+        <div class="rating">${btns}</div>`;
+      body.appendChild(d);
+      qn++;
+    });
+    c.appendChild(sec);
+  });
+}
+
+function toggleCat(id){ document.getElementById(id).classList.toggle('open'); }
+
+function pick(qId, val, catId){
+  const was = answers[qId]!==undefined;
+  answers[qId]=val;
+  for(let n=1;n<=5;n++){
+    const b=document.getElementById(`rb-${qId}-${n}`);
+    if(b){ b.className='r-btn'; if(n===val) b.classList.add(`sel-${n}`); }
+  }
+  if(!was) answered++;
+  document.getElementById('pFill').style.width=Math.round((answered/33)*100)+'%';
+  document.getElementById('pLabel').textContent=`${answered} / 33`;
+  const cat=CATS.find(c=>c.id===catId);
+  const a=cat.qs.filter(q=>answers[q.id]!==undefined).length;
+  const badge=document.getElementById('badge-'+catId);
+  badge.textContent=`${a} / ${cat.qs.length}`;
+  if(a===cat.qs.length) badge.classList.add('done'); else badge.classList.remove('done');
+}
+
+// ── GENERATE ──
+async function generate(){
+  const fn=document.getElementById('fn').value.trim();
+  const ln=document.getElementById('ln').value.trim();
+  const co=document.getElementById('co').value.trim();
+  const em=document.getElementById('em').value.trim();
+  if(!fn||!ln||!co||!em){ alert('Please fill in your name, company, and email.'); return; }
+  if(answered<25){ alert(`Please answer at least 25 questions (you've answered ${answered}).`); return; }
+  if(GEMINI_KEY==="AIzaSyDtt6X98PJ_MUr6wkf-o6NtPqvvo8JbgEQ"){ alert('Gemini API key not configured.'); return; }
+
+  const ld=document.getElementById('loading');
+  ld.classList.add('on');
+  const steps=['ls1','ls2','ls3','ls4','ls5'];
+  let si=0;
+  const iv=setInterval(()=>{
+    if(si>0) document.getElementById(steps[si-1]).classList.remove('on');
+    if(si<steps.length){ document.getElementById(steps[si]).classList.add('on'); si++; }
+  },2000);
+
+  try{
+    // ── Calculate scores ──
+    let total=0, totalQ=0;
+    const catScores={};
+    CATS.forEach(cat=>{
+      let s=0,n=0;
+      cat.qs.forEach(q=>{ if(answers[q.id]){ s+=answers[q.id]; n++; total+=answers[q.id]; totalQ++; }});
+      catScores[cat.id]={ title:cat.title, icon:cat.icon, score:s, count:n, avg:n>0?(s/n).toFixed(1):0 };
+    });
+
+    // ── Tier ──
+    const tier=TIERS.find(t=>total<=t.max)||TIERS[3];
+
+    // ── Revenue leakage estimate ──
+    const revVal=parseInt(document.getElementById('rev').value)||2500000;
+    const leakage=Math.round(revVal*tier.leakPct/10000)*10000;
+
+    // ── Pre-written recs for score <= 3 ──
+    const critRecs=[], warnRecs=[];
+    CATS.forEach(cat=>{
+      cat.qs.forEach(q=>{
+        const s=answers[q.id];
+        if(!s) return;
+        if(s<=2) critRecs.push({...q.rec, score:s, catTitle:cat.title, severity:'critical'});
+        else if(s===3) warnRecs.push({...q.rec, score:s, catTitle:cat.title, severity:'warning'});
+      });
+    });
+
+    // ── Build rec blocks HTML ──
+    let recHtml='';
+    if(critRecs.length===0&&warnRecs.length===0){
+      recHtml='<div class="rec-block rec-good"><div class="rec-tag" style="color:var(--green)">✅ Strong Performance</div><div class="rec-title">No Critical Gaps Identified</div><div class="rec-stat">Your scores show a well-developed sales operation. Focus areas are in optimization and scaling rather than remediation.</div></div>';
+    } else {
+      critRecs.slice(0,5).forEach(r=>{
+        recHtml+=`<div class="rec-block rec-critical">
+          <div class="rec-tag" style="color:var(--red)">🚨 Critical Gap · ${r.catTitle} · Score: ${r.score}/5</div>
+          <div class="rec-title">${r.title}</div>
+          <div class="rec-stat">${r.stat}</div>
+          <div class="rec-action">→ ${r.action}</div>
+        </div>`;
+      });
+      warnRecs.slice(0,4).forEach(r=>{
+        recHtml+=`<div class="rec-block rec-warning">
+          <div class="rec-tag" style="color:var(--amber)">⚠️ Warning · ${r.catTitle} · Score: ${r.score}/5</div>
+          <div class="rec-title">${r.title}</div>
+          <div class="rec-stat">${r.stat}</div>
+          <div class="rec-action">→ ${r.action}</div>
+        </div>`;
+      });
+    }
+
+    // ── Gemini narrative ──
+    const ro=document.getElementById('ro').value||'Business Owner';
+    const ind=document.getElementById('ind').value||'Business';
+    const ts=document.getElementById('ts').value||'Unknown';
+    const chal=document.getElementById('chal').value||'Not specified';
+
+    const topGaps=critRecs.slice(0,3).map(r=>r.title).join('; ');
+    const catSummary=Object.values(catScores).map(c=>`${c.title}: ${c.avg}/5`).join(' | ');
+
+    const prompt=`You are Stephen Samchuck, a Fractional Sales Operations expert. You've completed a Revenue Engine Audit™ for a client. Write a focused, personalized 400-500 word analysis in HTML using only <h2>, <h3>, <p>, <ul>, <li>, <strong>.
+
+CLIENT: ${fn} ${ln}, ${ro} at ${co} | Industry: ${ind} | Team: ${ts} | Challenge: ${chal}
+TOTAL SCORE: ${total}/165 | TIER: ${tier.name} | EST. REVENUE LEAKAGE: $${leakage.toLocaleString()}
+CATEGORY SCORES: ${catSummary}
+TOP CRITICAL GAPS: ${topGaps||'None identified'}
+
+Write THREE sections only:
+<h2>What Your Scores Tell Me About ${co}</h2> — 2 paragraphs. Address ${fn} directly. Reference their industry and team size. Be specific about what the score pattern reveals about their current state. Be honest and direct, not generic.
+<h2>The Revenue Math</h2> — Explain why the estimated leakage of $${leakage.toLocaleString()} is realistic for a company at their revenue level. Break it into 2-3 contributing factors based on their lowest scores. Use numbers and percentages.
+<h2>Your 90-Day Priority Sequence</h2> — Three specific phases, each 30 days. Name the exact thing to do, not vague advice. Reference their specific gaps.
+
+Tone: expert, direct, warm. Like a trusted advisor who has seen this pattern before and knows exactly what to do. Do NOT be generic or motivational. Be specific to their scores.`;
+
+    const resp=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_KEY}`,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({contents:[{parts:[{text:prompt}]}],generationConfig:{temperature:.72,maxOutputTokens:900}})
+    });
+    const data=await resp.json();
+    clearInterval(iv);
+    ld.classList.remove('on');
+
+    if(!data.candidates||!data.candidates[0]) throw new Error('No Gemini response');
+    const narrative=data.candidates[0].content.parts[0].text.replace(/```html|```/g,'').trim();
+
+    // ── Render report ──
+    renderReport({fn,ln,co,ro,ind,ts,em,total,tier,leakage,catScores,recHtml,narrative,revVal});
+
+  } catch(e){
+    clearInterval(iv);
+    document.getElementById('loading').classList.remove('on');
+    console.error(e);
+    alert('Error generating report: '+e.message);
+  }
+}
+
+function renderReport(d){
+  document.getElementById('auditForm').style.display='none';
+  const rp=document.getElementById('report');
+  rp.classList.add('on');
+  rp.scrollIntoView({behavior:'smooth'});
+
+  // Header
+  document.getElementById('rTitle').textContent=`${d.co} — Revenue Engine Audit™`;
+  document.getElementById('rMeta').textContent=`Prepared for ${d.fn} ${d.ln}, ${d.ro} · ${d.ind} · Team: ${d.ts} · ${new Date().toLocaleDateString('en-CA',{year:'numeric',month:'long',day:'numeric'})}`;
+
+  // Tier
+  document.getElementById('tierBadge').innerHTML=`<span class="tier-badge ${d.tier.class}">${d.tier.emoji} ${d.tier.name} — Score: ${d.total} / 165</span>`;
+
+  // Leakage
+  document.getElementById('leakageNum').textContent='$'+d.leakage.toLocaleString();
+  document.getElementById('leakageDesc').textContent=d.tier.desc;
+
+  // Gauges
+  const strong=Object.values(d.catScores).filter(c=>parseFloat(c.avg)>=4).length;
+  const critical=Object.values(d.catScores).filter(c=>parseFloat(c.avg)<2.5).length;
+  const pct=Math.round((d.total/165)*100);
+  const gradeColor=d.tier.class==='tier-optimized'?'#5dd4a0':d.tier.class==='tier-scaling'?'#f0c060':d.tier.class==='tier-bottleneck'?'#ff9955':'#ff8878';
+  document.getElementById('gauges').innerHTML=`
+    <div class="gauge"><div class="g-num">${d.total}</div><div class="g-label">Total Score</div><div class="g-grade" style="color:${gradeColor}">${d.tier.name}</div></div>
+    <div class="gauge"><div class="g-num">${pct}%</div><div class="g-label">Best Practice Adoption</div></div>
+    <div class="gauge"><div class="g-num">${strong}</div><div class="g-label">Strong Areas</div><div class="g-grade" style="color:#5dd4a0">of 8</div></div>
+    <div class="gauge"><div class="g-num">${critical}</div><div class="g-label">Critical Gaps</div><div class="g-grade" style="color:#ff8878">Need Action</div></div>`;
+
+  // Category bars
+  let bars='';
+  Object.values(d.catScores).forEach(c=>{
+    const a=parseFloat(c.avg);
+    const pct=Math.round((a/5)*100);
+    const col=a>=4?'#1a6b4a':a>=3?'#d4a017':a>=2?'#d35400':'#c0392b';
+    bars+=`<div class="csb-row">
+      <div class="csb-name">${c.icon||''} ${c.title}</div>
+      <div class="csb-bar"><div class="csb-fill" style="width:${pct}%;background:${col}"></div></div>
+      <div class="csb-score" style="color:${col}">${c.avg}</div>
+    </div>`;
+  });
+  // inject icons back
+  Object.values(d.catScores).forEach((c,i)=>{ c.icon=CATS[i].icon; });
+  bars='';
+  CATS.forEach(cat=>{
+    const c=d.catScores[cat.id];
+    const a=parseFloat(c.avg);
+    const pct=Math.round((a/5)*100);
+    const col=a>=4?'#1a6b4a':a>=3?'#d4a017':a>=2?'#d35400':'#c0392b';
+    bars+=`<div class="csb-row">
+      <div class="csb-name">${cat.icon} ${cat.title}</div>
+      <div class="csb-bar"><div class="csb-fill" style="width:${pct}%;background:${col}"></div></div>
+      <div class="csb-score" style="color:${col}">${c.avg}</div>
+    </div>`;
+  });
+  document.getElementById('catBars').innerHTML=bars;
+
+  // Recs
+  document.getElementById('recBlocks').innerHTML=d.recHtml;
+
+  // AI narrative
+  document.getElementById('aiNarrative').innerHTML=d.narrative;
+
+  // Build top gaps + cat string
+  const topGaps=Object.values(d.catScores).sort((a,b)=>parseFloat(a.avg)-parseFloat(b.avg)).slice(0,3).map(c=>c.title).join(',');
+  const catStr=Object.values(d.catScores).map(c=>`${c.title}:${c.avg}`).join('|');
+
+  // Save to localStorage so debrief tool can look up by email
+  try{ localStorage.setItem('rea_'+d.em.toLowerCase(), JSON.stringify({fn:d.fn,ln:d.ln,co:d.co,ind:d.ind,ts:d.ts,em:d.em,score:d.total,tier:d.tier.name,leakage:d.leakage,gaps:topGaps,cats:catStr,qAnswers:''})); }catch(e){}
+
+  // Calendly redirect → confirmation page with audit data in URL params
+  const auditParams=new URLSearchParams({name:`${d.fn} ${d.ln}`,co:d.co,role:d.ro,ind:d.ind,ts:d.ts,em:d.em,score:d.total,leakage:d.leakage,tier:d.tier.name,gaps:topGaps,cats:catStr}).toString();
+  const calendlyWithRedirect=CALENDLY+'?redirect_url='+encodeURIComponent('confirmation.html?'+auditParams);
+  document.getElementById('calBtn').href=calendlyWithRedirect;
+  document.getElementById('ctaBody').innerHTML=`<strong style="color:var(--gold-light)">Your estimated revenue leakage: $${d.leakage.toLocaleString()}</strong><br><br>Book your 30-minute Revenue Strategy Session — $497, credited toward your retainer. Walk through your results, identify your #1 fix, build your 90-day plan.`;
+
+  // Store for PDF
+  window._rd={...d};
+}
+
+// ── PDF ──
+async function downloadPDF(){
+  const d=window._rd;
+  if(!d){ alert('Please generate your report first.'); return; }
+  const {jsPDF}=window.jspdf;
+  const doc=new jsPDF({unit:'pt',format:'letter'});
+  const pw=doc.internal.pageSize.getWidth();
+  const ph=doc.internal.pageSize.getHeight();
+  const mg=52, cw=pw-mg*2;
+  let y=mg;
+  const np=()=>{ doc.addPage(); y=mg; };
+  const ck=(n=30)=>{ if(y+n>ph-mg) np(); };
+
+  // Cover bar
+  doc.setFillColor(12,35,64);
+  doc.rect(0,0,pw,210,'F');
+  doc.setFillColor(26,58,92);
+  doc.rect(0,168,pw,42,'F');
+
+  doc.setTextColor(200,151,58);
+  doc.setFontSize(8); doc.setFont('helvetica','bold');
+  doc.text('REVENUE ENGINE AUDIT™ — CONFIDENTIAL DIAGNOSTIC REPORT',mg,46,{charSpace:.8});
+
+  doc.setTextColor(255,255,255);
+  doc.setFontSize(22); doc.setFont('helvetica','bold');
+  doc.text(d.co,mg,82);
+  doc.setFontSize(13); doc.setFont('helvetica','normal');
+  doc.setTextColor(180,200,220);
+  doc.text('Revenue Engine Audit™ Report',mg,106);
+
+  doc.setFontSize(8.5); doc.setTextColor(140,170,200);
+  doc.text(`${d.fn} ${d.ln} · ${d.ro} · ${d.ind} · ${new Date().toLocaleDateString('en-CA',{year:'numeric',month:'long',day:'numeric'})}`,mg,134);
+
+  doc.setTextColor(200,151,58);
+  doc.setFontSize(10); doc.setFont('helvetica','bold');
+  doc.text(`Score: ${d.total} / 165  ·  ${d.tier.name}  ·  Est. Revenue Leakage: $${d.leakage.toLocaleString()}`,mg,191);
+
+  y=240;
+
+  // Category scores
+  doc.setTextColor(12,35,64); doc.setFontSize(11); doc.setFont('helvetica','bold');
+  doc.text('REVENUE AREA SCORES',mg,y); y+=18;
+  CATS.forEach(cat=>{
+    ck(20);
+    const c=d.catScores[cat.id];
+    const avg=parseFloat(c.avg);
+    const bw=Math.round((avg/5)*(cw-140));
+    const col=avg>=4?[26,107,74]:avg>=3?[212,160,23]:avg>=2?[211,84,0]:[192,57,43];
+    doc.setFontSize(8.5); doc.setFont('helvetica','normal'); doc.setTextColor(60,80,100);
+    doc.text(`${cat.icon} ${cat.title}`,mg,y);
+    doc.setFillColor(220,228,238);
+    doc.rect(mg+140,y-9,cw-140,9,'F');
+    doc.setFillColor(...col);
+    doc.rect(mg+140,y-9,bw,9,'F');
+    doc.setTextColor(...col); doc.setFont('helvetica','bold');
+    doc.text(c.avg+'',pw-mg-18,y);
+    y+=17;
+  });
+
+  y+=14;
+
+  // Leakage
+  ck(50);
+  doc.setFillColor(253,236,234);
+  doc.rect(mg,y-14,cw,44,'F');
+  doc.setTextColor(192,57,43); doc.setFontSize(11); doc.setFont('helvetica','bold');
+  doc.text(`Estimated Annual Revenue Leakage: $${d.leakage.toLocaleString()}`,mg+10,y+6);
+  doc.setFontSize(8.5); doc.setFont('helvetica','normal'); doc.setTextColor(100,40,40);
+  const tierLines=doc.splitTextToSize(d.tier.desc,cw-20);
+  tierLines.forEach(l=>{ doc.text(l,mg+10,y+20); y+=1; });
+  y+=42;
+
+  // AI narrative — strip HTML
+  ck(20);
+  doc.setTextColor(12,35,64); doc.setFontSize(11); doc.setFont('helvetica','bold');
+  doc.text('FULL ANALYSIS',mg,y); y+=18;
+
+  const tmp=document.createElement('div');
+  tmp.innerHTML=d.narrative;
+  let cfs=8.5,cfw='normal',cfc=[60,80,100];
+  const walk=(node)=>{
+    if(node.nodeType===3){
+      const t=node.textContent.replace(/\s+/g,' ').trim();
+      if(!t) return;
+      ck(cfs+5);
+      const ls=doc.splitTextToSize(t,cw);
+      doc.setFontSize(cfs); doc.setFont('helvetica',cfw); doc.setTextColor(...cfc);
+      ls.forEach(l=>{ ck(cfs+4); doc.text(l,mg,y); y+=cfs+4; });
+    } else if(node.nodeType===1){
+      const tag=node.tagName.toLowerCase();
+      const os=cfs,ow=cfw,oc=cfc;
+      if(tag==='h2'){ y+=10; cfs=11; cfw='bold'; cfc=[12,35,64]; }
+      else if(tag==='h3'){ y+=6; cfs=9.5; cfw='bold'; cfc=[26,58,92]; }
+      else if(tag==='strong'){ cfw='bold'; }
+      else if(tag==='li'){ doc.text('•',mg+2,y); }
+      node.childNodes.forEach(walk);
+      cfs=os; cfw=ow; cfc=oc;
+      if(['h2','h3','p','li'].includes(tag)) y+=4;
+    }
+  };
+  tmp.childNodes.forEach(walk);
+
+  y+=14;
+
+  // CTA block
+  ck(70);
+  doc.setFillColor(12,35,64);
+  doc.rect(mg,y,cw,68,'F');
+  doc.setTextColor(200,151,58); doc.setFontSize(11); doc.setFont('helvetica','bold');
+  doc.text('YOUR NEXT STEP',mg+16,y+20);
+  doc.setTextColor(255,255,255); doc.setFontSize(8.5); doc.setFont('helvetica','normal');
+  doc.text('Book a Revenue Strategy Session — walk through your results, identify your #1 fix, build your 90-day plan.',mg+16,y+36);
+  doc.setTextColor(200,151,58); doc.setFont('helvetica','bold');
+  doc.text(CALENDLY,mg+16,y+52);
+  y+=82;
+
+  // Footer all pages
+  const pc=doc.internal.getNumberOfPages();
+  for(let i=1;i<=pc;i++){
+    doc.setPage(i);
+    doc.setFillColor(12,35,64);
+    doc.rect(0,ph-32,pw,32,'F');
+    doc.setFontSize(7.5); doc.setTextColor(140,170,200); doc.setFont('helvetica','normal');
+    doc.text(`Stephen Samchuck · Fractional Sales Operations · ${SERVICES}`,mg,ph-12);
+    doc.text(`Page ${i} of ${pc}`,pw-mg-30,ph-12);
+  }
+
+  doc.save(`${d.co.replace(/\s+/g,'_')}_Revenue_Engine_Audit_${new Date().toISOString().slice(0,10)}.pdf`);
+}
+
+buildUI();
+// Set Calendly link
+document.getElementById('calBtn').href=CALENDLY;
+</script>
+</body>
+</html>
