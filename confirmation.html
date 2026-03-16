@@ -317,7 +317,7 @@ async function submitAnswers(){
   btn.disabled = true;
 
   const payload = {
-    _subject: `Pre-Session Answers — ${prospect.name} at ${prospect.company}`,
+ _subject: `Pre-Session Answers — ${prospect.name !== 'Prospect' ? prospect.name + ' at ' + prospect.company : prospect.email || 'New Booking'}
     prospect_name:    prospect.name,
     prospect_company: prospect.company,
     prospect_role:    prospect.role,
