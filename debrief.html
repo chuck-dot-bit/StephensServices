@@ -132,7 +132,7 @@
 <div class="hero">
   <div class="timer-pill">⚡ 60-Second Debrief</div>
   <h1>Session just ended?<br><em>Let's capture it.</em></h1>
-  <p>4 quick inputs + your Zoom summary. Gemini generates the follow-up email. You review and send.</p>
+  <p>4 quick inputs + your Zoom summary.  generates the follow-up email. You review and send.</p>
 </div>
 
 <div class="wrap">
@@ -288,7 +288,7 @@ Example:
 </div>
 
 <script>
-const GEMINI_KEY  = ""; // Key lives in Cloudflare Worker — not here
+
 const SERVICES    = "https://chuck-dot-bit.github.io/StephensServices";
 const STRIPE_LINK = "https://buy.stripe.com/28E8wQfdC6490ZdgWz00000";
 
@@ -355,10 +355,6 @@ async function generateFollowUp(){
 
   if(!zoomSummary && !problem){
     alert('Please paste the Zoom AI summary or describe what was discussed — Gemini needs this to personalize the email.');
-    return;
-  }
-  if(GEMINI_KEY === ""){
-    alert('Add your Gemini API key to the GEMINI_KEY variable.');
     return;
   }
 
