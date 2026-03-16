@@ -646,7 +646,6 @@ async function generate(){
   const em=document.getElementById('em').value.trim();
   if(!fn||!ln||!co||!em){ alert('Please fill in your name, company, and email.'); return; }
   if(answered<25){ alert(`Please answer at least 25 questions (you've answered ${answered}).`); return; }
-  if(GEMINI_KEY===""){ alert('Gemini API key not configured.'); return; }
 
   const ld=document.getElementById('loading');
   ld.classList.add('on');
