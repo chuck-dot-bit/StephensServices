@@ -259,8 +259,9 @@ Respond in this exact JSON format only, no markdown:
     const text = data.candidates[0].content.parts[0].text.replace(/```json|```/g,'').trim();
     const questions = JSON.parse(text);
     renderQuestions(questions);
-  } catch(e){
-    console.error(e);
+   } catch(e){
+    console.error('FULL ERROR:', e);
+    alert('Question generation error: ' + e.message);
     renderFallbackQuestions();
   }
 }
