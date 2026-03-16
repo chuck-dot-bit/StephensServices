@@ -739,7 +739,8 @@ Tone: expert, direct, warm. Like a trusted advisor who has seen this pattern bef
     clearInterval(iv);
     ld.classList.remove('on');
 
-    if(!data.candidates||!data.candidates[0]) throw new Error('No Gemini response');
+if(!data||data.error) throw new Error(data?.error?.message||'No Gemini response');
+if(!data.candidates||!data.candidates[0]) throw new Error('No candidates in response');
     const narrative=data.candidates[0].content.parts[0].text.replace(/```html|```/g,'').trim();
 
     // ── Render report ──
