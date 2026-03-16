@@ -178,7 +178,7 @@
 </div>
 
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-const GEMINI_KEY = ""; // Handled by Worker
+
 const FORMSPREE  = "https://formspree.io/f/xjgakoza";
 
 // ── Read URL params passed from audit tool ──
@@ -206,10 +206,6 @@ document.getElementById('scLeakage').textContent = prospect.leakage
 
 // ── Generate reflection questions via Gemini ──
 async function generateQuestions(){
-  if(GEMINI_KEY === ""){
-    renderFallbackQuestions();
-    return;
-  }
 
   const prompt = `You are Stephen Samchuck, a Fractional Sales Operations expert. A prospect just completed a Revenue Engine Audit™ and booked a paid strategy session. Generate exactly 3 personalized reflection questions based on their specific audit results.
 
