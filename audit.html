@@ -369,7 +369,7 @@
 // ══════════════════════════════════════════
 // CONFIG — replace before deploying
 // ══════════════════════════════════════════
-const GEMINI_KEY = "AIzaSyDtt6X98PJ_MUr6wkf-o6NtPqvvo8JbgEQ";
+const GEMINI_KEY = ""; // Handled by Worker // Key removed — calls go through secure Worker
 const CALENDLY   = "https://calendly.com/kssamchuck/30min"; // replace with your Calendly URL
 const SERVICES   = "https://chuck-dot-bit.github.io/StephensServices";
 
@@ -646,7 +646,7 @@ async function generate(){
   const em=document.getElementById('em').value.trim();
   if(!fn||!ln||!co||!em){ alert('Please fill in your name, company, and email.'); return; }
   if(answered<25){ alert(`Please answer at least 25 questions (you've answered ${answered}).`); return; }
-  if(GEMINI_KEY==="AIzaSyDtt6X98PJ_MUr6wkf-o6NtPqvvo8JbgEQ"){ alert('Gemini API key not configured.'); return; }
+  if(GEMINI_KEY===""){ alert('Gemini API key not configured.'); return; }
 
   const ld=document.getElementById('loading');
   ld.classList.add('on');
@@ -731,7 +731,7 @@ Write THREE sections only:
 
 Tone: expert, direct, warm. Like a trusted advisor who has seen this pattern before and knows exactly what to do. Do NOT be generic or motivational. Be specific to their scores.`;
 
-    const resp=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_KEY}`,{
+    const resp=await fetch(`https://gemini-proxy.kssamchuck.workers.dev`,{
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify({contents:[{parts:[{text:prompt}]}],generationConfig:{temperature:.72,maxOutputTokens:900}})

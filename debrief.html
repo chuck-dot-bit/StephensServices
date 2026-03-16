@@ -288,7 +288,7 @@ Example:
 </div>
 
 <script>
-const GEMINI_KEY  = "AIzaSyDtt6X98PJ_MUr6wkf-o6NtPqvvo8JbgEQ";
+const GEMINI_KEY  = ""; // Key lives in Cloudflare Worker — not here
 const SERVICES    = "https://chuck-dot-bit.github.io/StephensServices";
 const STRIPE_LINK = "https://buy.stripe.com/28E8wQfdC6490ZdgWz00000";
 
@@ -357,7 +357,7 @@ async function generateFollowUp(){
     alert('Please paste the Zoom AI summary or describe what was discussed — Gemini needs this to personalize the email.');
     return;
   }
-  if(GEMINI_KEY === "AIzaSyDtt6X98PJ_MUr6wkf-o6NtPqvvo8JbgEQ"){
+  if(GEMINI_KEY === ""){
     alert('Add your Gemini API key to the GEMINI_KEY variable.');
     return;
   }
@@ -428,7 +428,7 @@ SUBJECT: [subject line]
 
   try{
     const resp = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_KEY}`,
+      `https://gemini-proxy.kssamchuck.workers.dev`,
       { method:'POST', headers:{'Content-Type':'application/json'},
         body: JSON.stringify({
           contents:[{parts:[{text:prompt}]}],
