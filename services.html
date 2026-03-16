@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Fractional Sales Operations by Stephen Samchuck. $1,600/month retainer, $497 strategy session, free Revenue Engine Audit™. Vancouver, BC.">
+<title>Services & Pricing — Revenue Engine Audit™</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600;1,700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#0c2340;--navy-mid:#163554;--gold:#c8973a;--gold-light:#f0c060;--gold-pale:#fdf3e3;
+  --cream:#f8f6f1;--white:#ffffff;--text:#1a1a2e;--text-mid:#3d4a5c;--text-light:#6b7a8d;
+  --border:#dde4ed;--green:#1a6b4a;--green-light:#e8f7f0;
+  --shadow-sm:0 2px 12px rgba(12,35,64,.07);--shadow:0 6px 28px rgba(12,35,64,.11);
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Outfit',sans-serif;background:var(--cream);color:var(--text);line-height:1.6;overflow-x:hidden}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(12,35,64,.96);backdrop-filter:blur(12px);border-bottom:1px solid rgba(255,255,255,.06);padding:0 48px;height:64px;display:flex;align-items:center;justify-content:space-between}
+.nav-brand{font-family:'Cormorant Garamond',serif;font-size:1.25rem;font-weight:700;color:#fff;text-decoration:none;display:flex;align-items:center;gap:10px}
+.nav-brand-dot{width:8px;height:8px;border-radius:50%;background:var(--gold);flex-shrink:0}
+.nav-links{display:flex;align-items:center;gap:32px}
+.nav-links a{color:rgba(255,255,255,.65);text-decoration:none;font-size:.85rem;font-weight:500;transition:color .2s}
+.nav-links a:hover,.nav-links a.active{color:#fff}
+.nav-cta{background:var(--gold);color:#fff !important;padding:9px 22px;border-radius:8px;font-weight:700 !important;font-size:.82rem !important;letter-spacing:.04em;text-transform:uppercase;transition:background .2s !important}
+.nav-cta:hover{background:#b07828 !important}
+
+.page-hero{background:var(--navy);padding:140px 48px 80px;position:relative;overflow:hidden;text-align:center}
+.hero-glow{position:absolute;top:-20%;left:50%;transform:translateX(-50%);width:600px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(200,151,58,.1) 0%,transparent 65%);pointer-events:none}
+.page-hero-inner{max-width:720px;margin:0 auto;position:relative}
+.hero-eyebrow{font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:14px}
+.page-hero h1{font-family:'Cormorant Garamond',serif;font-size:clamp(2.4rem,4.5vw,4rem);font-weight:700;color:#fff;line-height:1.1;letter-spacing:-.02em;margin-bottom:18px}
+.page-hero h1 em{color:var(--gold-light);font-style:italic}
+.page-hero-sub{font-size:1rem;color:rgba(255,255,255,.65);font-weight:300;line-height:1.75}
+
+.section{padding:88px 48px}
+.section-inner{max-width:1140px;margin:0 auto}
+.section-eyebrow{font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:10px}
+.section-title{font-family:'Cormorant Garamond',serif;font-size:clamp(1.8rem,3.5vw,2.8rem);font-weight:700;color:var(--navy);line-height:1.15;margin-bottom:14px}
+.section-title em{color:var(--gold);font-style:italic}
+.section-sub{font-size:.95rem;color:var(--text-mid);max-width:560px;font-weight:300;line-height:1.75;margin-bottom:52px}
+
+/* PRICING CARDS */
+.pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-bottom:48px;align-items:start}
+.price-card{background:#fff;border:1px solid var(--border);border-radius:20px;padding:36px 32px;box-shadow:var(--shadow-sm);position:relative;transition:box-shadow .2s,transform .2s}
+.price-card:hover{box-shadow:var(--shadow);transform:translateY(-3px)}
+.price-card.featured{background:var(--navy);border-color:var(--navy)}
+.price-card.featured-border{border:2px solid var(--gold)}
+.pc-badge{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--gold);color:#fff;font-size:.68rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:4px 16px;border-radius:12px;white-space:nowrap}
+.pc-icon{font-size:1.8rem;margin-bottom:16px}
+.pc-name{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:700;color:var(--navy);margin-bottom:6px}
+.price-card.featured .pc-name{color:#fff}
+.pc-price{font-family:'Cormorant Garamond',serif;font-size:2.6rem;font-weight:700;color:var(--gold);line-height:1;margin-bottom:4px}
+.price-card.featured .pc-price{color:var(--gold-light)}
+.pc-period{font-size:.78rem;color:var(--text-light);margin-bottom:16px}
+.price-card.featured .pc-period{color:rgba(255,255,255,.5)}
+.pc-divider{border:none;border-top:1px solid var(--border);margin:18px 0}
+.price-card.featured .pc-divider{border-color:rgba(255,255,255,.1)}
+.pc-hours{display:flex;gap:10px;margin-bottom:18px}
+.pc-hour-item{flex:1;background:rgba(200,151,58,.08);border:1px solid rgba(200,151,58,.2);border-radius:8px;padding:10px;text-align:center}
+.price-card.featured .pc-hour-item{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.12)}
+.pch-num{font-family:'Cormorant Garamond',serif;font-size:1.4rem;color:var(--gold);line-height:1}
+.price-card.featured .pch-num{color:var(--gold-light)}
+.pch-label{font-size:.62rem;color:var(--text-light);text-transform:uppercase;letter-spacing:.05em;margin-top:2px}
+.price-card.featured .pch-label{color:rgba(255,255,255,.4)}
+.pc-includes{list-style:none;display:flex;flex-direction:column;gap:8px;margin-bottom:24px}
+.pc-includes li{font-size:.82rem;color:var(--text-mid);display:flex;align-items:flex-start;gap:8px;line-height:1.5}
+.price-card.featured .pc-includes li{color:rgba(255,255,255,.7)}
+.pc-includes li::before{content:'✓';color:var(--green);font-weight:700;flex-shrink:0;margin-top:1px}
+.price-card.featured .pc-includes li::before{color:#5dd4a0}
+.pc-btn{display:block;text-align:center;background:var(--navy);color:#fff;text-decoration:none;border:none;border-radius:10px;padding:14px;font-family:'Outfit',sans-serif;font-size:.88rem;font-weight:700;cursor:pointer;transition:background .2s;letter-spacing:.02em;width:100%}
+.pc-btn:hover{background:#081828}
+.price-card.featured .pc-btn{background:var(--gold);color:#fff}
+.price-card.featured .pc-btn:hover{background:#b07828}
+.pc-note{font-size:.72rem;color:var(--text-light);text-align:center;margin-top:10px;font-style:italic}
+.price-card.featured .pc-note{color:rgba(255,255,255,.4)}
+
+/* DELIVERABLES TABLE */
+.del-section{background:#fff;padding:88px 48px}
+.del-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+.del-item{border:1px solid var(--border);border-radius:14px;padding:24px;display:flex;gap:16px;align-items:flex-start;transition:box-shadow .2s,border-color .2s}
+.del-item:hover{box-shadow:var(--shadow-sm);border-color:rgba(200,151,58,.3)}
+.del-icon{font-size:1.4rem;flex-shrink:0;margin-top:2px}
+.del-title{font-size:.9rem;font-weight:700;color:var(--navy);margin-bottom:4px}
+.del-desc{font-size:.78rem;color:var(--text-mid);line-height:1.6}
+.del-tools{margin-top:8px;display:flex;gap:6px;flex-wrap:wrap}
+.del-tool{font-size:.68rem;font-weight:600;color:var(--gold);background:var(--gold-pale);padding:2px 8px;border-radius:10px}
+
+/* VS COMPARISON */
+.vs-section{background:var(--navy);padding:88px 48px}
+.vs-grid{display:grid;grid-template-columns:1fr 1fr;gap:32px;max-width:800px;margin:0 auto}
+.vs-col{border-radius:16px;padding:32px}
+.vs-col.bad{background:rgba(192,57,43,.15);border:1px solid rgba(192,57,43,.25)}
+.vs-col.good{background:rgba(26,107,74,.15);border:1px solid rgba(26,107,74,.3)}
+.vs-col-title{font-size:.8rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:16px}
+.vs-col.bad .vs-col-title{color:#ff8878}
+.vs-col.good .vs-col-title{color:#5dd4a0}
+.vs-list{list-style:none;display:flex;flex-direction:column;gap:10px}
+.vs-list li{font-size:.84rem;color:rgba(255,255,255,.7);display:flex;align-items:flex-start;gap:8px;line-height:1.5}
+.vs-list li::before{flex-shrink:0;font-weight:700}
+.vs-col.bad .vs-list li::before{content:'✗';color:#ff8878}
+.vs-col.good .vs-list li::before{content:'✓';color:#5dd4a0}
+
+/* GUARANTEE */
+.guarantee-section{padding:88px 48px;text-align:center;background:var(--cream)}
+.guarantee-badge{display:inline-flex;align-items:center;gap:10px;background:#fff;border:2px solid var(--gold);border-radius:50px;padding:16px 32px;margin-bottom:24px;box-shadow:var(--shadow-sm)}
+.gb-icon{font-size:1.6rem}
+.gb-text{font-size:.9rem;font-weight:700;color:var(--navy)}
+.guarantee-section h2{font-family:'Cormorant Garamond',serif;font-size:clamp(1.8rem,3vw,2.6rem);color:var(--navy);margin-bottom:12px;font-weight:700}
+.guarantee-section h2 em{color:var(--gold);font-style:italic}
+.guarantee-section p{font-size:.92rem;color:var(--text-mid);max-width:520px;margin:0 auto 32px;line-height:1.75}
+
+.btn-primary{background:var(--gold);color:#fff;border:none;border-radius:10px;padding:15px 34px;font-family:'Outfit',sans-serif;font-size:.92rem;font-weight:700;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:8px;transition:background .2s,transform .15s;box-shadow:0 4px 20px rgba(200,151,58,.25)}
+.btn-primary:hover{background:#b07828;transform:translateY(-2px)}
+.btn-secondary{background:#fff;color:var(--navy);border:1.5px solid var(--border);border-radius:10px;padding:14px 28px;font-family:'Outfit',sans-serif;font-size:.88rem;font-weight:600;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:8px;transition:border-color .2s}
+.btn-secondary:hover{border-color:var(--navy)}
+.cta-actions{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+
+footer{background:var(--navy);border-top:1px solid rgba(255,255,255,.08);padding:40px 48px}
+.footer-inner{max-width:1140px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:20px}
+.footer-brand{font-family:'Cormorant Garamond',serif;font-size:1.1rem;color:#fff;font-weight:700}
+.footer-links{display:flex;gap:24px}
+.footer-links a{font-size:.78rem;color:rgba(255,255,255,.4);text-decoration:none;transition:color .2s}
+.footer-links a:hover{color:rgba(255,255,255,.8)}
+.footer-copy{font-size:.72rem;color:rgba(255,255,255,.28)}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.page-hero-inner{animation:fadeUp .7s ease .1s both}
+.reveal{opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s ease}
+.reveal.visible{opacity:1;transform:translateY(0)}
+
+@media(max-width:900px){
+  nav{padding:0 20px}
+  .nav-links{display:none}
+  .page-hero{padding:100px 20px 60px}
+  .section,.del-section,.vs-section,.guarantee-section{padding:56px 20px}
+  .pricing-grid{grid-template-columns:1fr}
+  .del-grid{grid-template-columns:1fr}
+  .vs-grid{grid-template-columns:1fr}
+  footer{padding:32px 20px}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-brand"><span class="nav-brand-dot"></span>Revenue Engine Audit™</a>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="about.html">About</a>
+    <a href="audit.html">Free Audit</a>
+    <a href="services.html" class="active">Services</a>
+    <a href="audit.html" class="nav-cta">Take the Audit →</a>
+  </div>
+</nav>
+
+<section class="page-hero">
+  <div class="hero-glow"></div>
+  <div class="page-hero-inner">
+    <div class="hero-eyebrow">Services & Pricing</div>
+    <h1>The right engagement<br>for where you <em>are</em>.</h1>
+    <p class="page-hero-sub">Start free. The audit data tells us exactly which engagement makes sense — and what to tackle first.</p>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="section" style="background:#fff">
+  <div class="section-inner">
+    <div class="reveal" style="text-align:center;margin-bottom:52px">
+      <div class="section-eyebrow">Three Ways to Work Together</div>
+      <h2 class="section-title">Every engagement starts<br>with <em>evidence, not assumptions</em>.</h2>
+    </div>
+    <div class="pricing-grid reveal">
+
+      <!-- FREE AUDIT -->
+      <div class="price-card">
+        <div class="pc-icon">📋</div>
+        <div class="pc-name">Revenue Engine Audit™</div>
+        <div class="pc-price">Free</div>
+        <div class="pc-period">$2,500 value · Instant report · No email required</div>
+        <hr class="pc-divider">
+        <ul class="pc-includes">
+          <li>33 diagnostics across 8 revenue areas</li>
+          <li>Score out of 165 with tier classification</li>
+          <li>Estimated annual revenue leakage in dollars</li>
+          <li>Critical gaps with pre-written recommendation blocks</li>
+          <li>Personalized 90-day action plan</li>
+          <li>Downloadable branded PDF report</li>
+        </ul>
+        <a href="audit.html" class="pc-btn">Take the Free Audit →</a>
+        <div class="pc-note">No credit card. No obligation.</div>
+      </div>
+
+      <!-- STRATEGY SESSION -->
+      <div class="price-card featured-border">
+        <div class="pc-badge">Most Popular First Step</div>
+        <div class="pc-icon">🎯</div>
+        <div class="pc-name">Revenue Strategy Session</div>
+        <div class="pc-price">$497</div>
+        <div class="pc-period">USD · 30 minutes · Credited toward retainer</div>
+        <hr class="pc-divider">
+        <ul class="pc-includes">
+          <li>Full audit review with Stephen — live, on Zoom</li>
+          <li>Deep-dive into your top 3 revenue gaps</li>
+          <li>90-day implementation roadmap built together</li>
+          <li>Priority sequencing — what to fix first and why</li>
+          <li>$497 credited to Month 1 if you proceed</li>
+          <li>Session recording provided</li>
+        </ul>
+        <a href="audit.html" class="pc-btn">Start with the Audit First →</a>
+        <div class="pc-note">Booking opens after completing the audit.</div>
+      </div>
+
+      <!-- RETAINER -->
+      <div class="price-card featured">
+        <div class="pc-icon">⚡</div>
+        <div class="pc-name">Fractional Sales Operations Retainer</div>
+        <div class="pc-price">$1,600</div>
+        <div class="pc-period">USD / month · 36 hours included · Cancel anytime</div>
+        <hr class="pc-divider">
+        <div class="pc-hours">
+          <div class="pc-hour-item"><div class="pch-num">16</div><div class="pch-label">Hrs Live</div></div>
+          <div class="pc-hour-item"><div class="pch-num">20</div><div class="pch-label">Hrs Delivered</div></div>
+        </div>
+        <ul class="pc-includes">
+          <li>CRM audit, build & optimization</li>
+          <li>Lead funnel — automated & repeatable</li>
+          <li>KPI dashboards & live reporting</li>
+          <li>Process documentation & playbooks</li>
+          <li>Sales automation (Zapier, Coefficient)</li>
+          <li>Weekly coaching & team enablement</li>
+          <li>Cross-functional alignment</li>
+          <li>Territory & account management</li>
+        </ul>
+        <a href="https://buy.stripe.com/28E8wQfdC6490ZdgWz00000" class="pc-btn" target="_blank">Start the Retainer →</a>
+        <div class="pc-note">$497 strategy session credited toward Month 1.</div>
+      </div>
+    </div>
+
+    <!-- VS full time hire -->
+    <div class="reveal" style="background:var(--gold-pale);border:1px solid rgba(200,151,58,.3);border-radius:16px;padding:28px 32px;text-align:center;max-width:700px;margin:0 auto">
+      <div style="font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin-bottom:8px">The Math</div>
+      <div style="font-family:'Cormorant Garamond',serif;font-size:1.5rem;color:var(--navy);font-weight:700;margin-bottom:6px">$1,600/month vs. $12,500+/month for a full-time Sales Manager</div>
+      <div style="font-size:.84rem;color:var(--text-mid)">Same output. No benefits, no onboarding time, no 6-month ramp. Deliverables start in Week 1.</div>
+    </div>
+  </div>
+</section>
+
+<!-- DELIVERABLES -->
+<section class="del-section">
+  <div class="section-inner">
+    <div class="reveal">
+      <div class="section-eyebrow">What Gets Built</div>
+      <h2 class="section-title">Implemented deliverables — <em>not advice</em>.</h2>
+      <p class="section-sub">Every item below is a configured, documented, running system your team owns after the engagement.</p>
+    </div>
+    <div class="del-grid reveal">
+      <div class="del-item">
+        <span class="del-icon">⚙️</span>
+        <div>
+          <div class="del-title">CRM Architecture & Configuration</div>
+          <div class="del-desc">Pipeline stages with entry criteria, deal routing rules, activity automation, and data hygiene standards. Configured and live.</div>
+          <div class="del-tools"><span class="del-tool">Pipedrive</span><span class="del-tool">HubSpot</span><span class="del-tool">Salesforce</span></div>
+        </div>
+      </div>
+      <div class="del-item">
+        <span class="del-icon">🎯</span>
+        <div>
+          <div class="del-title">Lead Funnel System</div>
+          <div class="del-desc">End-to-end funnel from capture to close. Lead scoring, routing, nurture sequences, and conversion tracking. Automated at every stage.</div>
+          <div class="del-tools"><span class="del-tool">Zapier</span><span class="del-tool">Coefficient</span><span class="del-tool">CRM Native</span></div>
+        </div>
+      </div>
+      <div class="del-item">
+        <span class="del-icon">📊</span>
+        <div>
+          <div class="del-title">KPI Dashboards & Reporting</div>
+          <div class="del-desc">Live pipeline visibility, conversion rates, deal velocity, CAC, win rate, and revenue forecast. No more weekly Excel exports.</div>
+          <div class="del-tools"><span class="del-tool">Tableau</span><span class="del-tool">Microsoft 365</span><span class="del-tool">CRM Native</span></div>
+        </div>
+      </div>
+      <div class="del-item">
+        <span class="del-icon">📋</span>
+        <div>
+          <div class="del-title">Sales Playbooks & Documentation</div>
+          <div class="del-desc">Onboarding guides, objection handling scripts, ICP definitions, qualification frameworks, and territory coverage plans. Written once, used forever.</div>
+          <div class="del-tools"><span class="del-tool">Confluence</span><span class="del-tool">SharePoint</span></div>
+        </div>
+      </div>
+      <div class="del-item">
+        <span class="del-icon">⚡</span>
+        <div>
+          <div class="del-title">Process Automation</div>
+          <div class="del-desc">Eliminate manual data entry, enforce follow-up cadences, connect your tool stack. Every repetitive task identified and automated.</div>
+          <div class="del-tools"><span class="del-tool">Zapier</span><span class="del-tool">Coefficient</span><span class="del-tool">Make</span></div>
+        </div>
+      </div>
+      <div class="del-item">
+        <span class="del-icon">🗺️</span>
+        <div>
+          <div class="del-title">Territory & Account Management</div>
+          <div class="del-desc">Strategic territory design, account tiering, whitespace analysis, and distributor volume forecasting. Coverage maximized, not based on history.</div>
+          <div class="del-tools"><span class="del-tool">Tableau</span><span class="del-tool">CRM Native</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- VS COMPARISON -->
+<section class="vs-section">
+  <div class="section-inner">
+    <div class="reveal" style="text-align:center;margin-bottom:48px">
+      <div class="section-eyebrow" style="color:var(--gold-light)">The Difference</div>
+      <h2 class="section-title" style="color:#fff">Consultant vs. <em>implementer</em>.</h2>
+    </div>
+    <div class="vs-grid reveal">
+      <div class="vs-col bad">
+        <div class="vs-col-title">✗ Typical Sales Consultant</div>
+        <ul class="vs-list">
+          <li>Delivers a slide deck with recommendations</li>
+          <li>You implement (or don't) after they leave</li>
+          <li>Generic frameworks applied to your situation</li>
+          <li>Engagement ends — no running systems remain</li>
+          <li>Charges $250–500/hr for advice</li>
+          <li>No accountability for results</li>
+        </ul>
+      </div>
+      <div class="vs-col good">
+        <div class="vs-col-title">✓ This Engagement</div>
+        <ul class="vs-list">
+          <li>Delivers configured, running systems</li>
+          <li>Stephen implements — you approve and own it</li>
+          <li>Built specifically for your CRM, team, and industry</li>
+          <li>Engagement ends — documented systems remain</li>
+          <li>$1,600/month for 36 hours of implementation</li>
+          <li>KPIs set in Month 1 — results are measurable</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GUARANTEE -->
+<section class="guarantee-section">
+  <div class="reveal">
+    <div class="guarantee-badge">
+      <span class="gb-icon">🛡️</span>
+      <span class="gb-text">Month-to-month · Cancel anytime · Deliverables are yours to keep</span>
+    </div>
+    <h2>No lock-in.<br><em>Just results.</em></h2>
+    <p>Every engagement is month-to-month. Cancel anytime. The CRM configurations, playbooks, dashboards, and automations you've received are yours regardless. The goal is systems that outlast the engagement — not dependency on a consultant.</p>
+    <div class="cta-actions">
+      <a href="audit.html" class="btn-primary">Start with the Free Audit →</a>
+      <a href="https://www.linkedin.com/in/kssamchuck/" target="_blank" class="btn-secondary">Ask a Question on LinkedIn</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">Revenue Engine Audit™</div>
+    <div class="footer-links">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="audit.html">Free Audit</a>
+      <a href="services.html">Services</a>
+      <a href="https://www.linkedin.com/in/kssamchuck/" target="_blank">LinkedIn</a>
+    </div>
+    <div class="footer-copy">© 2026 Stephen Samchuck · Vancouver, BC · revenueengineaudit.com</div>
+  </div>
+</footer>
+
+<script>
+const observer=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');});
+},{threshold:.1});
+document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
+window.addEventListener('scroll',()=>{
+  document.querySelector('nav').style.boxShadow=window.scrollY>40?'0 4px 24px rgba(0,0,0,.3)':'';
+});
+</script>
+</body>
+</html>

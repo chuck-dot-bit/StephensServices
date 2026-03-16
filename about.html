@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Meet Stephen Samchuck — Fractional Sales Operations specialist, Vancouver BC. Electrical Engineering background, oil & gas, HVAC, and 10+ years building revenue systems.">
+<title>About Stephen Samchuck — Revenue Engine Audit™</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600;1,700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy:#0c2340;--navy-mid:#163554;--navy-light:#1e4a6e;
+  --gold:#c8973a;--gold-light:#f0c060;--gold-pale:#fdf3e3;
+  --cream:#f8f6f1;--white:#ffffff;
+  --text:#1a1a2e;--text-mid:#3d4a5c;--text-light:#6b7a8d;
+  --border:#dde4ed;--green:#1a6b4a;--green-light:#e8f7f0;
+  --shadow-sm:0 2px 12px rgba(12,35,64,.07);
+  --shadow:0 6px 28px rgba(12,35,64,.11);
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Outfit',sans-serif;background:var(--cream);color:var(--text);line-height:1.6;overflow-x:hidden}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(12,35,64,.96);backdrop-filter:blur(12px);border-bottom:1px solid rgba(255,255,255,.06);padding:0 48px;height:64px;display:flex;align-items:center;justify-content:space-between}
+.nav-brand{font-family:'Cormorant Garamond',serif;font-size:1.25rem;font-weight:700;color:#fff;text-decoration:none;display:flex;align-items:center;gap:10px}
+.nav-brand-dot{width:8px;height:8px;border-radius:50%;background:var(--gold);flex-shrink:0}
+.nav-links{display:flex;align-items:center;gap:32px}
+.nav-links a{color:rgba(255,255,255,.65);text-decoration:none;font-size:.85rem;font-weight:500;letter-spacing:.02em;transition:color .2s}
+.nav-links a:hover,.nav-links a.active{color:#fff}
+.nav-cta{background:var(--gold);color:#fff !important;padding:9px 22px;border-radius:8px;font-weight:700 !important;font-size:.82rem !important;letter-spacing:.04em;text-transform:uppercase;transition:background .2s !important}
+.nav-cta:hover{background:#b07828 !important}
+
+/* HERO */
+.page-hero{background:var(--navy);padding:140px 48px 80px;position:relative;overflow:hidden}
+.hero-glow{position:absolute;top:-20%;right:-10%;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(200,151,58,.1) 0%,transparent 65%);pointer-events:none}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(200,151,58,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(200,151,58,.03) 1px,transparent 1px);background-size:48px 48px;pointer-events:none}
+.page-hero-inner{max-width:1140px;margin:0 auto;display:grid;grid-template-columns:1fr 360px;gap:80px;align-items:center}
+.hero-eyebrow{font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:16px}
+.page-hero h1{font-family:'Cormorant Garamond',serif;font-size:clamp(2.4rem,4.5vw,4rem);font-weight:700;color:#fff;line-height:1.1;letter-spacing:-.02em;margin-bottom:20px}
+.page-hero h1 em{color:var(--gold-light);font-style:italic}
+.page-hero-sub{font-size:1rem;color:rgba(255,255,255,.65);font-weight:300;line-height:1.75;max-width:500px}
+
+/* Profile card */
+.profile-card{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:20px;padding:32px;text-align:center}
+.profile-initials{width:96px;height:96px;border-radius:50%;background:linear-gradient(135deg,var(--gold) 0%,#b07828 100%);display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:2.2rem;font-weight:700;color:#fff;margin:0 auto 16px;border:3px solid rgba(200,151,58,.3)}
+.profile-name{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:700;color:#fff;margin-bottom:4px}
+.profile-title{font-size:.8rem;color:rgba(255,255,255,.55);margin-bottom:20px;letter-spacing:.02em}
+.profile-stats{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.ps-item{background:rgba(255,255,255,.06);border-radius:10px;padding:12px;text-align:center}
+.ps-num{font-family:'Cormorant Garamond',serif;font-size:1.6rem;color:var(--gold-light);line-height:1}
+.ps-label{font-size:.65rem;color:rgba(255,255,255,.45);text-transform:uppercase;letter-spacing:.06em;margin-top:2px}
+
+/* SECTIONS */
+.section{padding:88px 48px}
+.section-inner{max-width:1140px;margin:0 auto}
+.section-eyebrow{font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:10px}
+.section-title{font-family:'Cormorant Garamond',serif;font-size:clamp(1.8rem,3.5vw,2.8rem);font-weight:700;color:var(--navy);line-height:1.15;margin-bottom:14px;letter-spacing:-.01em}
+.section-title em{color:var(--gold);font-style:italic}
+.section-sub{font-size:.95rem;color:var(--text-mid);max-width:560px;font-weight:300;line-height:1.75;margin-bottom:52px}
+
+/* Story grid */
+.story-grid{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:start}
+.story-body p{font-size:.95rem;color:var(--text-mid);line-height:1.85;margin-bottom:18px;font-weight:300}
+.story-body p strong{color:var(--text);font-weight:600}
+.story-body p em{color:var(--gold);font-style:normal;font-weight:600}
+
+/* Signal blocks — the EE/oil gas story */
+.signal-blocks{display:flex;flex-direction:column;gap:16px}
+.signal-block{background:#fff;border:1px solid var(--border);border-radius:14px;padding:22px 24px;box-shadow:var(--shadow-sm)}
+.sb-header{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.sb-icon{font-size:1.4rem;flex-shrink:0}
+.sb-title{font-size:.88rem;font-weight:700;color:var(--navy)}
+.sb-period{font-size:.72rem;color:var(--text-light);font-weight:400;margin-top:1px}
+.sb-body{font-size:.8rem;color:var(--text-mid);line-height:1.65}
+.sb-bridge{margin-top:10px;padding-top:10px;border-top:1px solid var(--border);font-size:.78rem;color:var(--gold);font-weight:600;display:flex;align-items:center;gap:6px}
+
+/* Credibility grid */
+.cred-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.cred-card{background:#fff;border:1px solid var(--border);border-radius:14px;padding:24px;box-shadow:var(--shadow-sm);transition:box-shadow .2s,transform .2s}
+.cred-card:hover{box-shadow:var(--shadow);transform:translateY(-2px)}
+.cred-icon{font-size:1.6rem;margin-bottom:12px}
+.cred-title{font-size:.9rem;font-weight:700;color:var(--navy);margin-bottom:6px}
+.cred-body{font-size:.78rem;color:var(--text-mid);line-height:1.6}
+
+/* Philosophy */
+.philosophy-section{background:var(--navy);padding:88px 48px}
+.philosophy-section .section-title{color:#fff}
+.philosophy-section .section-sub{color:rgba(255,255,255,.6)}
+.philosophy-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.phil-card{border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:28px 24px}
+.phil-num{font-family:'Cormorant Garamond',serif;font-size:2.4rem;color:rgba(200,151,58,.3);line-height:1;margin-bottom:10px}
+.phil-title{font-size:.9rem;font-weight:700;color:#fff;margin-bottom:8px}
+.phil-body{font-size:.8rem;color:rgba(255,255,255,.55);line-height:1.65}
+
+/* CTA */
+.about-cta{background:var(--cream);padding:88px 48px;text-align:center}
+.about-cta h2{font-family:'Cormorant Garamond',serif;font-size:clamp(1.8rem,3.5vw,2.8rem);color:var(--navy);margin-bottom:12px;font-weight:700}
+.about-cta h2 em{color:var(--gold);font-style:italic}
+.about-cta p{font-size:.95rem;color:var(--text-mid);margin-bottom:32px;max-width:480px;margin-left:auto;margin-right:auto;line-height:1.75}
+.cta-actions{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+.btn-primary{background:var(--gold);color:#fff;border:none;border-radius:10px;padding:15px 34px;font-family:'Outfit',sans-serif;font-size:.92rem;font-weight:700;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:8px;transition:background .2s,transform .15s;box-shadow:0 4px 20px rgba(200,151,58,.25);letter-spacing:.02em}
+.btn-primary:hover{background:#b07828;transform:translateY(-2px)}
+.btn-secondary{background:#fff;color:var(--navy);border:1.5px solid var(--border);border-radius:10px;padding:14px 28px;font-family:'Outfit',sans-serif;font-size:.88rem;font-weight:600;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:8px;transition:border-color .2s,box-shadow .2s}
+.btn-secondary:hover{border-color:var(--navy);box-shadow:var(--shadow-sm)}
+
+footer{background:var(--navy);border-top:1px solid rgba(255,255,255,.08);padding:40px 48px}
+.footer-inner{max-width:1140px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:20px}
+.footer-brand{font-family:'Cormorant Garamond',serif;font-size:1.1rem;color:#fff;font-weight:700}
+.footer-links{display:flex;gap:24px}
+.footer-links a{font-size:.78rem;color:rgba(255,255,255,.4);text-decoration:none;transition:color .2s}
+.footer-links a:hover{color:rgba(255,255,255,.8)}
+.footer-copy{font-size:.72rem;color:rgba(255,255,255,.28)}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.page-hero-inner{animation:fadeUp .7s ease .1s both}
+.reveal{opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s ease}
+.reveal.visible{opacity:1;transform:translateY(0)}
+
+@media(max-width:900px){
+  nav{padding:0 20px}
+  .nav-links{display:none}
+  .page-hero{padding:100px 20px 60px}
+  .page-hero-inner{grid-template-columns:1fr;gap:36px}
+  .profile-card{display:none}
+  .section{padding:56px 20px}
+  .philosophy-section{padding:56px 20px}
+  .story-grid{grid-template-columns:1fr;gap:36px}
+  .cred-grid{grid-template-columns:1fr 1fr}
+  .philosophy-grid{grid-template-columns:1fr}
+  .about-cta{padding:56px 20px}
+  footer{padding:32px 20px}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-brand"><span class="nav-brand-dot"></span>Revenue Engine Audit™</a>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="about.html" class="active">About</a>
+    <a href="audit.html">Free Audit</a>
+    <a href="services.html">Services</a>
+    <a href="audit.html" class="nav-cta">Take the Audit →</a>
+  </div>
+</nav>
+
+<section class="page-hero">
+  <div class="hero-grid"></div>
+  <div class="hero-glow"></div>
+  <div class="page-hero-inner">
+    <div>
+      <div class="hero-eyebrow">About Stephen Samchuck</div>
+      <h1>The engineer who<br>learned to <em>build</em><br>revenue systems.</h1>
+      <p class="page-hero-sub">Most sales consultants come from sales. Stephen comes from Electrical Engineering, oil & gas exploration, and HVAC — industries where precision systems aren't optional and the cost of failure is measured in dollars per day.</p>
+    </div>
+    <div class="profile-card">
+      <div class="profile-initials">SS</div>
+      <div class="profile-name">Stephen Samchuck</div>
+      <div class="profile-title">Fractional Sales Operations · Vancouver, BC</div>
+      <div class="profile-stats">
+        <div class="ps-item"><div class="ps-num">36</div><div class="ps-label">Hrs / Month</div></div>
+        <div class="ps-item"><div class="ps-num">$1,600</div><div class="ps-label">USD / Month</div></div>
+        <div class="ps-item"><div class="ps-num">7+</div><div class="ps-label">Tools Certified</div></div>
+        <div class="ps-item"><div class="ps-num">8</div><div class="ps-label">Revenue Areas</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- THE STORY -->
+<section class="section" style="background:#fff">
+  <div class="section-inner">
+    <div class="story-grid">
+      <div class="story-body reveal">
+        <div class="section-eyebrow">The Background</div>
+        <h2 class="section-title">Signal over noise.<br><em>Always.</em></h2>
+        <p>My career started with a fundamental question: <strong>how do you extract a clear signal from a noisy environment?</strong> In Electrical Engineering, that meant building my own amplifiers during analog-to-digital system upgrades — learning to isolate signal, eliminate interference, and get reliable output from complex systems.</p>
+        <p>In oil and gas exploration, it meant loading specialized seismic equipment — inserting blasting caps into 80–120 foot shotholes and operating borehole VSI tools with multi-component geophones — to convert mechanical vibrations underground into electrical signals that mapped hydrocarbon reservoirs kilometres below surface. <em>The data had to be right. There was no tolerance for noise.</em></p>
+        <p>From there: HVAC systems engineering, where the same precision thinking applied to complex mechanical systems under real-world operating conditions.</p>
+        <p>Then sales operations — where I discovered that <strong>most companies have the same problem as a poorly configured seismic array:</strong> too much noise, not enough signal, and nobody quite sure why the output doesn't match expectations.</p>
+        <p>I fix that. Not with advice — with implementations. Configured CRM systems, automated workflows, live dashboards, documented processes. Systems that generate reliable signal from your sales activity — consistently, repeatably, without the founder in the loop for every decision.</p>
+      </div>
+      <div class="signal-blocks reveal" style="transition-delay:.15s">
+        <div class="signal-block">
+          <div class="sb-header">
+            <span class="sb-icon">⚡</span>
+            <div><div class="sb-title">Electrical Engineering</div><div class="sb-period">University · Analog-to-Digital Systems</div></div>
+          </div>
+          <div class="sb-body">Built amplifiers during A/D system upgrades. Learned signal isolation, noise elimination, and precision output from complex electronic systems.</div>
+          <div class="sb-bridge">→ Applied to sales ops: eliminate process noise, amplify revenue signal</div>
+        </div>
+        <div class="signal-block">
+          <div class="sb-header">
+            <span class="sb-icon">🔬</span>
+            <div><div class="sb-title">Oil & Gas Exploration</div><div class="sb-period">Reflection Seismology · Explosives Licensed</div></div>
+          </div>
+          <div class="sb-body">Operated borehole VSI systems and Vertical Seismic Profile acquisition. Loaded Geogel into 80–120 ft shotholes. Correlated seismic data with Schlumberger depth logs to map subsurface structures.</div>
+          <div class="sb-bridge">→ Applied to sales ops: instrument correctly, trust the data, eliminate guesswork</div>
+        </div>
+        <div class="signal-block">
+          <div class="sb-header">
+            <span class="sb-icon">🌡️</span>
+            <div><div class="sb-title">HVAC Systems</div><div class="sb-period">Commercial & Industrial</div></div>
+          </div>
+          <div class="sb-body">Applied engineering precision to mechanical systems in commercial and industrial environments. Complex systems, real-world constraints, zero tolerance for failure.</div>
+          <div class="sb-bridge">→ Applied to sales ops: design for real conditions, not ideal ones</div>
+        </div>
+        <div class="signal-block">
+          <div class="sb-header">
+            <span class="sb-icon">📈</span>
+            <div><div class="sb-title">Sales Operations & BDM</div><div class="sb-period">CRM · Automation · Revenue Systems</div></div>
+          </div>
+          <div class="sb-body">Built revenue operations across multiple industries: CRM systems (Pipedrive, HubSpot, Salesforce), lead funnels, KPI dashboards, cross-functional alignment, and sales process automation at scale.</div>
+          <div class="sb-bridge">→ The same system-design mindset. Different domain.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CREDIBILITY -->
+<section class="section">
+  <div class="section-inner">
+    <div class="reveal">
+      <div class="section-eyebrow">What I Build</div>
+      <h2 class="section-title">Revenue systems that <em>outlast</em> the engagement.</h2>
+      <p class="section-sub">Every deliverable is implemented, documented, and designed to run without me. The goal is a sales engine your team owns.</p>
+    </div>
+    <div class="cred-grid reveal">
+      <div class="cred-card">
+        <div class="cred-icon">⚙️</div>
+        <div class="cred-title">CRM Architecture</div>
+        <div class="cred-body">Pipedrive, HubSpot, Salesforce — configured correctly, used consistently, and trusted by leadership. Including pipeline stages, deal routing, and automation rules.</div>
+      </div>
+      <div class="cred-card">
+        <div class="cred-icon">🎯</div>
+        <div class="cred-title">Lead Funnel Systems</div>
+        <div class="cred-body">End-to-end lead funnels: capture, qualify, route, nurture, convert. Automated where appropriate. Measured at every stage. Repeatable by design.</div>
+      </div>
+      <div class="cred-card">
+        <div class="cred-icon">📊</div>
+        <div class="cred-title">KPI Dashboards</div>
+        <div class="cred-body">Live visibility into pipeline health, conversion rates, deal velocity, and revenue forecast. Tableau, Microsoft 365, and native CRM reporting.</div>
+      </div>
+      <div class="cred-card">
+        <div class="cred-icon">⚡</div>
+        <div class="cred-title">Process Automation</div>
+        <div class="cred-body">Zapier, Coefficient, and native CRM automations that eliminate manual data entry, enforce follow-up, and connect your tool stack without copy-paste.</div>
+      </div>
+      <div class="cred-card">
+        <div class="cred-icon">📋</div>
+        <div class="cred-title">Sales Playbooks</div>
+        <div class="cred-body">Documented processes your team actually follows. Onboarding guides, objection handling, territory coverage, and qualification frameworks. Written once, used forever.</div>
+      </div>
+      <div class="cred-card">
+        <div class="cred-icon">🤝</div>
+        <div class="cred-title">Cross-Functional Alignment</div>
+        <div class="cred-body">Sales, finance, operations, and engineering — aligned on handoffs, approval workflows, and shared definitions. Revenue stops falling through the cracks.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PHILOSOPHY -->
+<section class="philosophy-section">
+  <div class="section-inner">
+    <div class="reveal">
+      <div class="section-eyebrow" style="color:var(--gold-light)">The Philosophy</div>
+      <h2 class="section-title">Three principles that <em>drive every engagement</em>.</h2>
+      <p class="section-sub">These aren't values on a wall. They're engineering constraints I design every system around.</p>
+    </div>
+    <div class="philosophy-grid reveal">
+      <div class="phil-card">
+        <div class="phil-num">01</div>
+        <div class="phil-title">Systems problems require systems solutions.</div>
+        <div class="phil-body">When revenue is underperforming, the first instinct is to blame the people. The real culprit is almost always the process, the tooling, or the data. Fix the system first. The people will follow.</div>
+      </div>
+      <div class="phil-card">
+        <div class="phil-num">02</div>
+        <div class="phil-title">Deliverables, not advice.</div>
+        <div class="phil-body">Anyone can tell you what to do. The value is in doing it — configuring the CRM, building the automation, documenting the playbook. You don't pay for a slide deck. You pay for a running system.</div>
+      </div>
+      <div class="phil-card">
+        <div class="phil-num">03</div>
+        <div class="phil-title">Built to outlast the engagement.</div>
+        <div class="phil-body">Every system I build is documented and designed to run without me. The goal is a sales engine your team owns. A dependency on your consultant is a poorly designed system.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="about-cta">
+  <div class="reveal">
+    <h2>Ready to find your<br><em>revenue leaks</em>?</h2>
+    <p>Start with the free Revenue Engine Audit™. 8 minutes, instant report. Or connect on LinkedIn to ask a question first.</p>
+    <div class="cta-actions">
+      <a href="audit.html" class="btn-primary">Take the Free Audit →</a>
+      <a href="https://www.linkedin.com/in/kssamchuck/" target="_blank" class="btn-secondary">Connect on LinkedIn</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">Revenue Engine Audit™</div>
+    <div class="footer-links">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="audit.html">Free Audit</a>
+      <a href="services.html">Services</a>
+      <a href="https://www.linkedin.com/in/kssamchuck/" target="_blank">LinkedIn</a>
+    </div>
+    <div class="footer-copy">© 2026 Stephen Samchuck · Vancouver, BC · revenueengineaudit.com</div>
+  </div>
+</footer>
+
+<script>
+const observer = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('visible'); });
+},{threshold:.1});
+document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
+window.addEventListener('scroll',()=>{
+  document.querySelector('nav').style.boxShadow = window.scrollY>40 ? '0 4px 24px rgba(0,0,0,.3)' : '';
+});
+</script>
+</body>
+</html>
