@@ -206,6 +206,12 @@ document.getElementById('scLeakage').textContent = prospect.leakage
 
 // ── Generate reflection questions via Gemini ──
 async function generateQuestions(){
+  // Safety timeout — show fallback after 10 seconds no matter what
+  const timeout = setTimeout(()=>{
+    if(document.getElementById('rqContent').querySelector('.rq-spinner')){
+      renderFallbackQuestions();
+    }
+  }, 10000);
 
   const prompt = `You are Stephen Samchuck, a Fractional Sales Operations expert. A prospect just completed a Revenue Engine Audit™ and booked a paid strategy session. Generate exactly 3 personalized reflection questions based on their specific audit results.
 
@@ -258,10 +264,11 @@ Respond in this exact JSON format only, no markdown:
     const data = await resp.json();
     const text = data.candidates[0].content.parts[0].text.replace(/```json|```/g,'').trim();
     const questions = JSON.parse(text);
+clearTimeout(timeout);
     renderQuestions(questions);
-   } catch(e){
-    console.error('FULL ERROR:', e);
-    alert('Question generation error: ' + e.message);
+  } catch(e){
+    clearTimeout(timeout);
+    console.error('Confirmation error:', e.message, e.stack);
     renderFallbackQuestions();
   }
 }
