@@ -196,7 +196,13 @@ const prospect = {
   gaps:     params.get('gaps')     || '',   // top 3 gap titles, comma separated
   cats:     params.get('cats')     || ''    // category scores, pipe separated "CRM:2.1|Pipeline:1.8"
 };
-
+// Enrich with Calendly params if audit params missing
+if(!params.get('name') || params.get('name') === 'Prospect'){
+  const cName = params.get('invitee_full_name') || '';
+  const cEmail = params.get('invitee_email') || '';
+  if(cName) prospect.name = cName;
+  if(cEmail) prospect.email = cEmail;
+}
 // ── Populate score card ──
 document.getElementById('scScore').textContent  = prospect.score || '—';
 document.getElementById('scTier').textContent   = prospect.tier;
